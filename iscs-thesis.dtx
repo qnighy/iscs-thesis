@@ -1,0 +1,3097 @@
+% \iffalse meta-comment
+%
+% 'iscs-thesis' ドキュメントクラス
+%
+%  東京大学大学院情報理工学系研究科コンピュータ科学専攻
+%  / 東京大学理学部情報科学科 の学位論文を組版するための
+%  ドキュメントクラスです.
+%
+%  著作者:  山本 泰宇 (ymmt@is.s.u-tokyo.ac.jp) [原作]
+%           八登 崇之 (yato@is.s.u-tokyo.ac.jp) [修正]
+%
+%  このファイルを pLaTeX2e でコンパイルすると, 詳しい説明
+%  の書かれた文書(dvi ファイル)が生成されます.
+%  このソフトウェアは誰でも自由に使用および配布できますが,
+%  使用した結果に対しては著作者は責任を負わないものとします.
+%  このソフトウェアを改変する場合には, 上記の説明文書の中に
+%  書かれた注意書きを守ってください.
+% \fi
+%^^A--------------------------------------------------------
+%\DisableCrossrefs
+%\CodelineNumbered
+%\MakeShortVerb{\|}
+%\CheckSum{3477}
+%^^A--------------------------------------------------------
+%\iffalse  # driver 部は出力しない
+%    \begin{macrocode}
+%<*driver>
+\documentclass[a4j]{jarticle}
+\usepackage{doc}
+\setcounter{StandardModuleDepth}{1}
+\GetFileInfo{iscs-thesis.dtx}
+%\OnlyDescription
+%\RecordChanges
+%--------
+\newcommand*{\PKN}[1]{\textsf{#1}}
+\newcommand*{\DCN}[1]{\textsc{#1}}
+\newcommand*{\OPN}[1]{\texttt{#1}}
+\newcommand{\pTeX}{p\kern-.05em\TeX}
+\newcommand{\pLaTeX}{p\LaTeX}
+\newcommand{\pLaTeXe}{p\LaTeXe}
+\newcommand{\Jof}{\leavevmode\lower.5ex\hbox{\rm J}\kern-.17em}
+\newcommand{\JTeX}{\Jof\TeX}
+\newcommand{\JLaTeX}{\Jof\LaTeX}
+\newcommand{\JLaTeXe}{\Jof\LaTeXe}
+\newcommand*{\qparag}[1]{\noindent\textbf{#1}\quad}
+\newcommand{\SpGlue}{\hspace{0em plus 5em}}
+%--------
+\begin{document}
+\DocInput{iscs-thesis.dtx}
+\end{document}
+%    \end{macrocode}
+%</driver>
+%\fi
+%^^A========================================================
+%\title{ドキュメントクラス \textsf{iscs-thesis} (v1.3)}
+%\author{八登 崇之 (yato@is.s.u-tokyo.ac.jp)}
+%\date{2014/09/02}
+%\maketitle
+%^^A--------------------------------------------------------
+%\iffalse # Why is it needed?
+%<*skip>
+%\fi
+%
+%^^A========================================================
+%\section{概説}
+%\label{sec:Intro}
+%^^A--------------------------------------------------------
+%
+%本ドキュメントクラス \PKN{iscs-thesis} は,
+%東京大学大学院情報理工学系研究科コンピュータ科学専攻
+%および東京大学理学部情報科学科の
+%学位論文(卒業論文/修士論文/博士論文)を組版するためのものです.
+%
+%^^A----------------
+%\subsection{インストール}
+%\label{ssec:Install}
+%
+%|iscs-thesis.dtx| と |iscs-thesis.ins| のあるディレクトリで
+%\begin{quote}\begin{verbatim}
+%platex iscs-thesis.ins
+%\end{verbatim}\end{quote}
+%を実行すると, そのディレクトリに |iscs-thesis.cls| が
+%生成されるので, その |iscs-thesis.cls| を \TeX\ が読める
+%ディレクトリ(論文のソースファイルのあるディレクトリ等)に
+%置いてください.
+%なお, |iscs-thesis.cls| が一緒に配布されている場合は,
+%第三者による改変が行われていない限り,
+%それは上述の方法で生成されるものと
+%(漢字コードの差異を除いて)同一です.
+%
+%\par\noindent
+%注意 1: v1.1e から配布する.cls ファイルを JIS エンコーディングに
+%しました.
+%JIS のファイルは, SJIS または EUC ベースの \pTeX システムでも使えます.
+%\par\noindent
+%注意 2: このソースには, \DCN{docstrip} の公式のモジュール定義
+%はありません.
+%(わからない人は気にしないように.)
+%
+%
+%^^A----------------
+%\subsection{クラスオプション}
+%
+%すなわち, 論文のソースの冒頭の
+%\begin{quote}\begin{verbatim}
+%\documentclass[...]{iscs-thesis}
+%\end{verbatim}\end{quote}
+%の `|...|' の部分に書くものです.
+%\LaTeXe\ の \PKN{report} クラス(欧文用)と概ね同じ
+%ですが, 変更点を示しました.
+%
+%\begin{description}
+%\item[論文の種類(追加)]
+%  |senior| (卒業論文), |master| (修士論文),
+%  |doctor| (博士論文) のいずれか 1 つを
+%  必ず指定してください.
+%\item[基底フォントサイズ]
+%  |10pt|, |11pt|, |12pt| のいずれか.
+%  v1.2 から既定値が |11pt| に変更.
+%\item[\OPN{interim}]
+%  表紙を中間報告(要旨提出)用のものにします.
+%\item[Overfull box の設定]
+%  何と |draft| (出力する) を既定値にしています.
+%  消したい場合は |final| を指定してください.
+%\item[\OPN{sloppy}]
+%  単語間が空き過ぎになるのを許容して, 行分割が失敗する
+%  (その結果行からはみ出して出力される)のを防ぎます.
+%  Overfull に対処している暇がない時の応急処置に使えます.
+%  (プリアンブルに |\sloppy| を書いたのと同じです.)
+%\item[用紙サイズ]
+%  |a4paper| (A4 判, 既定値), |letterpaper| (US letter size),
+%  |legalpaper| (US legal size) のほかに,
+%  新たに |b4paper| (JIS B4 版, 364\,mm $\times$ 257\,mm)
+%  を追加しました.
+%  (もちろん, 学位論文は A4 判のはずですが.)
+%\item[要旨の出力の方法]
+%  英文と和文の要旨の間の改ページの制御です.
+%  \begin{itemize}
+%  \item |splitabst|:\quad 必ず改ページを入れます.
+%  \item |nosplitabst|:\quad 改ページを入れません.
+%  \item |autosplitabst| (既定値):\quad
+%    英文と和文の両方が併せて 1 ページに収まる場合は入れず,
+%    その他の場合は入れます.
+%  \end{itemize}
+%  普通は既定値でいいと思います.
+%  英文と和文がともに 1〜1.5 ページの量の場合,
+%  既定値(|splitabst| と同じ)では 4 ページになりますが,
+%  |nosplitabst| を指定して 3 ページにする方を好むかも
+%  しれません.
+%\item[前付けのページ番号]
+%  表題のページを前付けのページに含めるかどうかを指定します.
+%  \begin{itemize}
+%  \item |counttitlepage| (既定値):\quad
+%    表題のページをページ i とします.
+%    表題ページの前に別に表紙がある場合はこの設定が適切です.
+%  \item |nocounttitlepage| :\quad
+%    表題のページの次の紙をページ i とします.
+%    簡易製本で表題ページを表紙として扱う場合はこの設定が適切です.
+%  \end{itemize}
+%\item[\OPN{simpletitlepage}]
+%  博士論文を簡易製本する場合に適応し, 表題ページの体裁を
+%  製本時の表紙のもの(表題と氏名のみ)に変更します.
+%\item[\OPN{nobindoffset}]
+%  v1.3a からページレイアウトを計算する時に「綴じ代」を考慮するように
+%  しています.
+%  このオプションを指定すると綴じ代がないものと扱います.
+%\item[\OPN{english}]
+%  表紙および要旨の和文部分を出力しません.
+%  (ただし, ソースファイルは和文文字を含むので,
+%  必ず \pLaTeX\ を使う必要があります.)
+%  本文に和文文字がない限り, できる |.dvi| ファイルは
+%  和文フォントを含まないものになります.
+%\item[\OPN{prodigal}] (このオプションは v1.3 で廃止された.)
+%\item[\OPN{longline}]
+%  行の長さを妙に大きくする設定にします.
+%  通常は行長は英小文字 80 字分の幅に相当する長さになりますが,
+%  代わりに, 左右マージンが紙面横幅の 1/12 の長さになります.
+%\item[その他諸々]
+%  \PKN{report} と同じく,
+%  |twocolumn|, |twoside|, |openright|, |openbib|,
+%  |fleqn|, |leqno| が使えます.
+%\end{description}
+%提出する論文を作る場合は最初の 2 つ(と |final|)を
+%指定すれば十分です.
+%
+%\paragraph{廃止したオプション}
+%\PKN{report} にあった次のオプションを廃止しました.
+%\begin{description}
+%\item[\OPN{a5paper}, \OPN{b5paper}, \OPN{executivepaper}]
+%  A4 より小さい紙面では表題のページがうまく組めないので.
+%\item[\OPN{landscape}]
+%  まさか横置きにする人なんていないでしょう.
+%\item[\OPN{titlepage}]
+%  表題は常に独立のページに出力されます.
+%\end{description}
+%
+%^^A----------------
+%\subsection{テンプレート}
+%
+%\begin{quote}\footnotesize\begin{verbatim}
+%\documentclass[master,12pt]{iscs-thesis}
+%  % 論文の種類とフォントサイズをオプションに
+%%\usepackage{graphicx}% 必要に応じて
+%%\usepackage{mysettings}% 自分用設定
+%%-------------------
+%\etitle{Title in English}
+%\jtitle{和文標題}
+%\eauthor{Your Name}
+%\jauthor{氏名}
+%\esupervisor{Name of Your Supervisor}
+%\jsupervisor{指導教官氏名}
+%\supervisortitle{Title of Your Supervisor} % Professor, etc.
+%\date{February 8, 200X}
+%%-------------------
+%\begin{document}
+%\input{abstract}              % 要旨
+%   %\begin{eabstract}...\end{eabstract}
+%   %\begin{jabstract}...\end{jabstract}
+%\maketitle
+%\input{acknowledge}           % 謝辞
+%   %\begin{acknowledge}...\end{acknowledge}
+%\frontmatter          %% 前付け
+%\tableofcontents              % 目次
+%%\listoffigures               % 図目次
+%%\listoftables                % 表目次
+%%-------------------
+%\mainmatter           %% 本文
+%\include{introduction}        % 1 章
+%   %\chapter{Introduction}...
+%\include{preliminaries}       % 2 章
+%\include{another-section}     % 3 章
+%\include{yet-another-section} % 4 章
+%\include{conclusion}          % 5 章
+%%-------------------
+%\bibliographystyle{plain}     % 参考文献
+%\bibliography{mybib}          %
+%%-------------------
+%\end{document}
+%\end{verbatim}\end{quote}
+%
+%^^A----------------
+%\subsection{コードを変更する場合の注意}
+%\label{ssec:Modify}
+%
+%\PKN{iscs-thesis} のコード(プログラム)を変更する場合には
+%次の 2 つがあります.
+%
+%\paragraph{全使用者のためになる改良}
+%つまりバグ取りや機能拡張などです.
+%この場合は,
+%\begin{quote}
+%|.cls| を直接書き換えるのではなく,
+%必ず一度 |.dtx| を書き換えて, \ref{ssec:Install} 節で
+%書いたインストール作業により新しい |.cls| を得る
+%\end{quote}
+%ようにしてください.
+%|.cls| ファイルは, 単に |.dtx| の中の(大量にある) |%| で
+%始まる行を取り除いたものなので, |.cls| の各行に対応する
+%行が必ず存在します.
+%それを自分の思うように修正すればよいわけです.
+%変更履歴を残した方がいいのは勿論ですが,
+%それができない場合でも, 最低限バージョン番号は
+%きちんと変更しておきましょう.
+%そして必ず |.cls| と一緒に |.dtx| も配布しましょう.
+%
+%\paragraph{自分専用の設定変更}
+%この場合に上と同じ手順をとっても構いません
+%(配布はしないでしょうが).
+%しかし, 自分専用の設定の場合は,
+%修正部分を記したパッケージファイルを作成して
+%それを読み込むという方法の方が合理的だと思います.
+%
+%例えば, 図表のキャプションの字の大きさを |\small| に
+%変えたいとしましょう.
+%|.cls| ファイルを眺めると,
+%次のマクロの定義を変えればいいことが分かります.
+%\begin{quote}\small\begin{verbatim}
+%\long\def\@makecaption#1#2{% この最初に \small を入れる
+%  \vskip\abovecaptionskip
+%  \sbox\@tempboxa{#1: #2}%
+%  ...(中略)...
+%  \vskip\belowcaptionskip}
+%\end{verbatim}\end{quote}
+%そこで, 次の内容のファイル |mystyle.sty| を作ります.
+%(他の定義も加えてあります.)
+%\begin{quote}\small\begin{verbatim}
+%%% キャプションのフォントを \small にする
+%\long\def\@makecaption#1#2{%
+%  \small                       % 追加
+%  \vskip\abovecaptionskip
+%  \sbox\@tempboxa{#1: #2}%
+%  \ifdim \wd\@tempboxa >\hsize
+%    #1: #2\par
+%  \else
+%    \global \@minipagefalse
+%    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+%  \fi
+%  \vskip\belowcaptionskip}
+%%% \HUGE: 巨大な字を出す(type1cm 等が必要)
+%\newcommand\HUGE{\@setfontsize\HUGE{50}{75}}
+%\end{verbatim}\end{quote}
+%(注意: |\usepackage| で読み込まれるパッケージの中は\ 
+%|\makeatletter| の状態で処理されるので,
+%|\makeatletter| する必要はありません.)
+%
+%そして, 次のようにしてこのファイルを読み込ませれば
+%自分専用の設定になります.
+%\begin{quote}\small\begin{verbatim}
+%\documentclass[senior,12pt]{iscs-thesis}
+%\usepackage{mystyle}
+%  ...(以下略)...
+%\end{verbatim}\end{quote}
+%
+%もし, 止むを得ず |.cls| ファイルを直接編集することに
+%なった場合は, せめて「\TeX\ 社会の掟」だけは守りましょう.
+%すなわち
+%\begin{quote}
+%  ドキュメントクラスの名前(|iscs-thesis|)を他の名前に
+%  変更しましょう.
+%\end{quote}
+%この作業は |.cls| ファイル中の `|iscs-thesis|' の文字列を
+%新しいものに単純に(テキストエディタ等で)置換するだけでできますが,
+%|\ProvidesClass| の中の情報は自分で適当なものに直してください.
+%あとファイル名も変更しましょう.
+%たとえ自分からは他人に配布する意図がなかったとしても,
+%誰かがサーバに置いてある自分用のファイルを勝手に
+%コピーして使うかもしれないので\ldots.
+%
+%^^A----------------
+%\subsection{コマンドリファレンス}
+%\label{ssec:Commands}
+%
+%最後に, このドキュメントクラス特有のコマンドと環境
+%についてまとめておきます.
+%
+%\begin{itemize}
+%\item 以下の命令・環境は語句や文章を設定する
+%  (|\maketitle| で出力される).
+%  |\documentclass| と |\maketitle| の間のどこでも使える.
+%  \begin{itemize}
+%  \item |\etitle{|\meta{str}|}|:\quad 標題(英文).
+%  \item |\jtitle{|\meta{str}|}|:\quad 標題(和文).
+%  \item |\eauthor{|\meta{str}|}|:\quad 著者名(英文).
+%  \item |\jauthor{|\meta{str}|}|:\quad 著者名(和文).
+%  \item |\esupervisor{|\meta{str}|}|:\quad 指導教官名(英文).
+%  \item |\jsupervisor{|\meta{str}|}|:\quad 指導教官名(和文).
+%  \item |\supervisortitle{|\meta{str}|}|:\quad 
+%    指導教官の職名. Professor 等.
+%  \item |\supervisortitleline{|\meta{str}|}|:\quad 
+%    指導教官の職名の行の全体.
+%    |\supervisortitle| で指定した文字列は, \meta{str} の中で\ 
+%    |\thesupervisortitle| として参照できる.
+%  \item |\date{|\meta{str}|}|:\quad 日付.
+%    未設定だとエラーになる.
+%    ただし |\today| は使える.
+%  \item |eabstract| 環境:\quad 英文要旨.
+%  \item |jabstract| 環境:\quad 和文要旨.
+%  \end{itemize}
+%
+%\item |\maketitle|:\quad
+%  表紙のページを出力し, 続いて |eabstract|, |jabstract| で
+%  設定された要旨を出力する.
+%  設定に応じて, 表紙と要旨の間に空白ページが挿入される.
+%
+%\item |acknowledge| 環境:\quad
+%  謝辞の文章を新たなページに出力する.
+%
+%\item |\switchinterim{|\meta{yes}|}{|\meta{no}|}|:\quad
+%|interim| 指定時は \meta{yes}, それ以外は \meta{no} に
+%展開される.
+%
+%\item |\switchenglish{|\meta{yes}|}{|\meta{no}|}|:\quad
+%|english| 指定時は \meta{yes}, それ以外は \meta{no} に
+%展開される.
+%
+%\item |\chapterfont{|\meta{cmd1}|}{|\meta{cmd2}|}|:\quad
+%番号付(|\chapter|)および
+%番号なし(|\chapter*|)の章見出しのフォントをそれぞれ\ 
+%\meta{cmd1} および \meta{cmd2} に設定する.
+%初期値は両方とも |\LARGE\bfseries|.
+%
+%\item |\sectionfont{|\meta{cmd1}|}{|\meta{cmd2}|}{|\meta{cmd3}|}|:\quad
+%節(|\section|), \SpGlue 小節(|\subsection|), \SpGlue
+%小々節(|\subsubsection|)の見出しのフォントをそれぞれ\ 
+%\meta{cmd1}, \meta{cmd2}, \meta{cmd3} に設定する.
+%初期値は節が |\large\bfseries|,
+%小節と小々節が |\normalsize\bfseries|.
+%
+%\item |\noblankaftertp|:\quad
+%  表紙ページ直後の空白ページの出力を抑止する.
+%  (|twoside| および |openright| 指定時は無効.)
+%
+%\end{itemize}
+%
+%
+%^^A========================================================
+%\section{変更履歴}
+%\label{sec:Changes}
+%^^A--------------------------------------------------------
+%
+%^^A \changes って結局役に立たないな....
+%
+%\begin{description}
+%\item[Version 1.0] [1996/12/22, 山本]
+%  \begin{itemize}
+%  \item 初期バージョン.
+%  \item \JLaTeXe\ 標準の `\PKN{j-report}' クラスを基にしている.
+%    学位論文は英語なのになぜ和文用のクラスを用いたのかは不明.
+%  \item そのため, 一部の設定(段落下げの量など)が和文用のもの
+%    になっているという不具合があった.
+%  \item また \JLaTeXe\ の標準クラスオプションファイル
+%    (|j-size10.clo| など)を読み込むので,
+%    \JLaTeX\ がインストールされていないシステム
+%    (最近では \pLaTeX\ が主流なのでこれもよくある)では
+%    これらのファイルを別に用意しなければならなかった.
+%  \item この版では `\PKN{j-report}' にある全てのクラスオプション
+%    が指定できたが, |nottitlepage| 等の実際に使われ得ない
+%    ものは実装されていない.
+%    実を言えば, 1 つだけ謎のオプションが追加されているのだが\ldots.
+%    何を意図したのだろう.
+%    (v1.1 では廃止した.)
+%  \end{itemize}
+%
+%\item[Version 1.1] [2005/02/20, 八登]
+%  \begin{itemize}
+%  \item v1.0 で設定が \PKN{j-report} のままになっていて, かつ,
+%    \PKN{j-report} と \PKN{report} (\LaTeXe\ 標準) で異なっている
+%    部分については, なるべく \PKN{report} に合わせた.
+%    ただし, テキスト領域の大きさや行送りなど, 一部のパラメタ
+%    (おもに |j-sizeXX.clo| の前半で設定されているもの)は
+%    \PKN{j-report} のままにしている.
+%    これによる顕著な変更は次の 2 つ:
+%    \begin{itemize}
+%    \item 章(|\chapter|)や節(|\section|)等の見出し直後の段落下げ
+%      をしなくなった. (欧文ではしないのが普通.)
+%      する設定に戻す場合には, \PKN{indentfirst} パッケージを
+%      使えばよい.
+%    \item 段落下げの量を 1.5\,em (二段組の場合は 1\,em) に
+%      変更した.
+%      元は 1\,zw だった.
+%    \end{itemize}
+%  \item クラスオプションについて, 無意味なものを廃止した.
+%    またそれによって決して実行されなくなるコードを
+%    取り除いた.
+%  \item 元々クラスオプションファイル(|j-sizeXX.clo|)になっていた
+%    部分を本体に組み込んで, 1 つのファイルだけで使えるようにした.
+%  \item クラスファイルを \DCN{docstrip} ソース(|.dtx| ファイル)の
+%    形で配布することにした.
+%    こうした理由の 1 つはこの版に正統性を持たせるためである.
+%  \end{itemize}
+%
+%\item[Version 1.1a] [2005/02/24, 八登]
+%  \begin{itemize}
+%  \item `b3' 版の変更を取り入れた.
+%    \begin{itemize}
+%    \item 表紙(標題)のフォントサイズおよび垂直空きが
+%      基底フォントサイズに依らずに一定になるようにした.
+%      ただ, |\textwidth| の値が異なるので,
+%      完全に同じにはならない.
+%    \item 標題が長い時に, 表紙に入るべき内容が 2 ページに
+%      分割されてしまう現象を起こりにくくした.
+%      とりあえず 7 行(英語と日本語あわせて)までは大丈夫.
+%    \item 要旨の中の段落下げの量を,
+%      英文(|eabstract|)が 1.5\,em, 和文(|jabstract|)が 1\,zw
+%      に修正した.
+%    (元はそれぞれ 0\,em と 1\,em.)
+%  \item 参考文献リストの見出し(つまり `References') が
+%    目次に出るようにした.
+%  \end{itemize}
+%  \item さらに別の改変版に基づいて次を変更した.
+%    \begin{itemize}
+%    \item 修士/博士の場合の学位を「理学」から「情報理工学」
+%      (Degree of \ldots\ of Information Science and Technology
+%      in Computer Science) に変更した.
+%      (今まで変更されてなかったの!?)
+%      ただし, |gradiss| オプションを指定すると「理学」のままになる.
+%      昔の「理学系研究科情報科学専攻」の論文を改めて組版する
+%      ためのもの.
+%      ちなみに提出先は単に「東京大学大学院」なので変更なし.
+%    \item |interim| オプションを設けた.
+%      これを指定すると, 表紙が中間報告(要旨提出)のための
+%      ものになる,
+%  \end{itemize}
+%  \item |sloppy| オプションを設けた.
+%  \item |senior|, |master|, |doctor| のどれも指定されていないと
+%    エラー終了するようにした.
+%  \item |draft| を既定値にした. (嫌がらせ.)
+%  \item |description| 環境の定義を \PKN{jsarticle} と同様の
+%    ものに変更した.
+%  \item 和文フォントの明示的な代替設定を行った.
+%  \item 日付(|\date|)が設定されていないとエラーが出るようにした.
+%  \item その他, エラー処理を強化した.
+%  \end{itemize}
+%
+%\item[Version 1.1b] [2005/02/25, 八登]
+%  \begin{itemize}
+%  \item |\frontmatter|, |\mainmatter|, |\backmatter|
+%    を正式に採用.
+%  \item それに伴い, テンプレートを変更した.
+%  \item 表紙のレイアウトを調整した.
+%    学位論文が共著になるわけがないので |\and| を廃止.
+%  \end{itemize}
+%
+%\item[Version 1.1c] [2005/02/27, 八登]
+%  \begin{itemize}
+%  \item 要旨の処理(|eabstract| と |jabstract|)の定義を
+%    全面的に書き直した.
+%    \begin{itemize}
+%    \item 従来の処理では
+%      要旨環境の中での改ページが禁止されていた.
+%      これは「和文と英文の両方が 1 ページに収まらない場合は,
+%      別ページに分ける」
+%      という機能を実現するためだと思われる,
+%      しかし, これだと, 和文だけで 1 ページ分の量を超える
+%      場合には, その出力がテキスト領域(あるいは紙面自体)を
+%      はみ出してしまう.
+%    \item これに対処するために, 要旨の処理方法を変更して,
+%      要旨の途中で改ページができるようにした.
+%      そして, 前記の機能に対応するため, 事前に 2 つの box の
+%      高さの合計を調べて処理を分けている.
+%      (詳細は |\ist@showabstract| 命令の説明を参照.
+%      この辺りの処理の妥当性については自信がないので, \TeX\ に
+%      詳しい方は再検討してください.)
+%    \item |interim| 指定の時は, 標題(表紙)と要旨の間に
+%      空白のページを置くのを抑止した.
+%    \end{itemize}
+%  \item |twoside| や |openright| を指定している時には
+%    ページ番号の偶奇が保たれるようにしなければならないが,
+%    そうなっていなかったために, 奇数/偶数ページの設定が
+%    逆転してしまうことがあった.
+%    (この現象は, \PKN{report} クラスで |twoside| と |titlepage|
+%    を指定して |abstract| 環境を用いた時にも起こる.)
+%    この不具合を直して, これらのオプションがきちんと
+%    働くようにした.
+%    (論文を自分用に印刷する時に両面にする人は多いけど,
+%    わざわざ両面用の設定にする人なんていないよな\ldots.)
+%  \end{itemize}
+%
+%\item[Version 1.1d] [2005/03/03, 八登]
+%  \begin{itemize}
+%  \item 間違った |.cls| ファイルが出力されていたので修正した.
+%  \item |splitabst| / |nosplitabst| / |autosplitabst|
+%    オプションを追加.
+%  \item |prodigal| オプションを追加.
+%    レイアウトはまだあまり調整していない.
+%  \item |english| オプションを追加.
+%  \item 配布する |.cls| ファイルを JIS エンコーディングにしようと
+%    して, \texttt{platex --kanji=jis iscs-thesis.ins} とすると,
+%    なぜか出てくる |.cls| が EUC になって困った.
+%    (\texttt{--kanki} はこのような目的で使用するオプション
+%    ではないらしい.)
+%  \end{itemize}
+%
+%\item[Version 1.1e] [2005/12/17, 八登]
+%  \begin{itemize}
+%  \item 結局, 配布用の |.cls| ファイルは後処理で JIS エンコーディング
+%    に変換することにした.
+%  \end{itemize}
+%
+%\item[Version 1.1f] [2005/12/25, 八登]
+%  \begin{itemize}
+%  \item 指導教官の職名を表す行全体を |\supervisortitleline|
+%    でカスタマイズ可能にした.
+%    そして, |master|/|doctor| の時の既定値を\ 
+%    ``\dots\ of Computer Science'' に変更した.
+%  \item |interim| 指定時の表紙で, ``An Interim Report'' の下に
+%    日本語で「中間報告」と出るようにした.
+%    (これを変更する場合は, |\jinterrimname| を再定義せよ.)
+%  \item |\switchinterim|, |\switchenglish| コマンドを新設.
+%  \item |\noblankaftertp| コマンドを新設.
+%  \item |\maketitle| を |\maketitlepage| と |\makeabstract|
+%    に分離する準備を始めている.
+%    現時点では, |\maketitle| の処理は(論理的に) v1.1e と同じ.
+%  \end{itemize}
+%
+%\item[Version 1.1g] [2006/06/29, 八登]
+%  \begin{itemize}
+%  \item |\etitle| の中で |\\| (強制改行) を使うと
+%    エラーになっていたのを修正.
+%  \end{itemize}
+%
+%\item[Version 1.2] [2008/12/24]
+%
+%\item[Version 1.3] [2009/01/22, 八登]
+%  \begin{itemize}
+%  \item レイアウトを全面的に改訂した.
+%    \begin{itemize}
+%    \item 時代錯誤的な「ダブルスペース」の要請がなくなったので,
+%      行送りを \PKN{report} のものに合わせた.
+%    \item 縦方向のマージンを, ヘッダがないという前提で
+%      設定するようにした.
+%      今の設定でヘッダを使うと上部が窮屈になるので注意.
+%    \item 横方向のマージンは, 行の長さが英小文字 75 字に
+%      なるように設定した.
+%    \end{itemize}
+%  \item 基底文字サイズの既定値を v1.2 に合わせて 11pt に変更.
+%  \item |prodigal| オプションを廃止.
+%  \item |longline| オプションを追加.
+%    行をやたらと長くする.
+%  \item 表紙のページの内容が常に縦方向にセンタリング
+%    されるようにした.
+%  \item 博士論文の表紙の体裁を変更.
+%  \end{itemize}
+%
+%\item[Version 1.3a] [2009/03/11, 八登]
+%  \begin{itemize}
+%  \item 表題ページの後の空白ページを置かないのを既定にした.
+%  \item (|no|)|counttitlepage| オプションを追加.
+%  \item |simpletitlepage| オプションを追加.
+%    博士論文の簡易製本の時の表題ページ(表紙を兼ねる)の体裁を
+%    このオプションで指定するようにした.
+%  \item ページレイアウトの計算方法を変更した.
+%    \begin{itemize}
+%    \item 「綴じ」の領域(9\,mm)を考慮することにした.
+%    \item |nobindoffset| オプションを追加.
+%      これが有効の時は「綴じ」の領域を無視する.
+%    \item テキスト領域を紙面サイズの 5/6 に設定した.
+%      (ただし |longline| 非設定時は, 行長制限のために
+%       横幅はこれより狭くなる.)
+%    \item ヘッダ・フッタ領域をテキスト領域から外した.
+%      ノンブルはテキスト領域の外側(下側)に配置される.
+%    \item マージン幅は左右で $1:1$, 上下で $2:3$ とした.
+%    \item |longline| 非設定時の行長制限を 75 字相当から 80 字
+%      相当に緩和した. 
+%    \end{itemize}
+%  \end{itemize}
+%
+%\item[Version 1.3b] [2014/09/02, 藤沼]
+%  \begin{itemize}
+%  \item 英文表題が全て大文字化されないようにした．
+%  \end{itemize}
+%
+%\end{description}
+%
+%
+%^^A--------------------------------------------------------
+%\iffalse
+%</skip>
+%\fi
+%\StopEventually{}
+%\pagebreak
+%^^A--------------------------------------------------------
+%
+%^^A========================================================
+%\section{プログラム}
+%\label{sec:Program}
+%^^A--------------------------------------------------------
+%
+%以下の文中で,
+%\begin{itemize}
+%\item `\PKN{report}' は \LaTeXe\ (v1.4e\,[2001/04/21]) 標準
+%  の \PKN{report} クラス
+%\item `\PKN{book}' は \LaTeXe\ (v1.4e\,[2001/04/21]) 標準
+%  の \PKN{book} クラス
+%\item `\PKN{j-report}' は \JLaTeXe\ (v1.4b\,[2000/05/19]) 標準
+%  の \PKN{j-report} クラス
+%\item `\PKN{jsarticle}' は奥村晴彦氏作成の
+%  「\pLaTeXe\ 新ドキュメントクラス」([2004/12/29])の\ 
+%  \PKN{jsarticle} クラス
+%\end{itemize}
+%のことを指す.
+%
+%^^A----------------
+%\subsection{クラスファイルの宣言}
+%
+%    \begin{macrocode}
+%<*!isten>
+\NeedsTeXFormat{LaTeX2e}[1999/01/01]
+\ProvidesClass{iscs-thesis}
+    [2014/09/02 v1.3b
+     Dept of IS/CS thesis class]
+%    \end{macrocode}
+%
+%エラー処理のための命令.
+%    \begin{macrocode}
+\newcommand\ist@classname{iscs-thesis}
+\newcommand\ist@ahya{%
+  You cannot go any further.\MessageBreak
+  Type \space X <return> \space to quit.}
+\newcommand*\ist@fatalerror[1]{%
+  \ClassError\ist@classname{#1}\ist@ahya
+  \batchmode\@@end}% bombout
+\newcommand*\ist@error[1]{%
+  \ClassError\ist@classname{#1}\@ehc}
+\newcommand*\ist@err@invalid[1]{%
+  \ist@fatalerror{\string#1 is invalid in this document class}}
+\newcommand*\ist@err@notdefd[1]{%
+  \ist@error{No \string#1 given}??}
+%    \end{macrocode}
+%
+%^^A----------------
+%\subsection{オプションスイッチ}
+%
+% \begin{macro}{\if@restonecol}
+% \begin{macro}{\if@titlepage}
+% \begin{macro}{\if@openright}
+% \begin{macro}{\if@mainmatter}
+%基本的に \PKN{report} と同じ.
+%ただし, |titlepage| オプションがないので,
+%|\if@titlepage| は常に真となる.
+%また, \PKN{book} と同様の |\mainmatter| 等のコマンドの
+%ために |\if@mainmatter| を用意する.
+%    \begin{macrocode}
+\newcommand\@ptsize{}
+\newif\if@restonecol
+\newif\if@titlepage \@titlepagetrue
+\newif\if@openright
+\newif\if@mainmatter \@mainmattertrue
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%\begin{macro}{\if@seniorthesis}
+%\begin{macro}{\if@masterthesis}
+%\begin{macro}{\if@doctorthesis}
+%どの種類の論文であるかを表すスイッチ.
+%必ず丁度 1 つが真になる.
+%    \begin{macrocode}
+\newif\if@seniorthesis
+\newif\if@masterthesis
+\newif\if@doctorthesis
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\ifist@interim}
+%\begin{macro}{\ifist@gradiss}
+%\begin{macro}{\ifist@sloppy}
+%\begin{macro}{\ifist@english}
+%\begin{macro}{\ifist@blankaftertp}
+%\begin{macro}{\ist@splitabst}
+%その他のオプションに対するスイッチやマクロ.
+%\changes{v1.1a}{2005/02/24}
+%  {`ifist@interim 追加.}
+%\changes{v1.1a}{2005/02/24}
+%  {`ifist@sloppy 追加.}
+%\changes{v1.1d}{2005/02/28}
+%  {`ifist@prodigal, `ifist@splitabst 追加.}
+%\changes{v1.1d}{2005/03/03}
+%  {`ifist@english 追加.}
+%\changes{v1.1f}{2005/12/25}
+%  {`ifist@blankaftertp 追加.}
+%\changes{v1.3a}{2009/03/11}
+%  {`ifist@blankaftertp の既定値を偽に変更.}
+%    \begin{macrocode}
+\newif\ifist@interim
+\newif\ifist@gradiss
+\newif\ifist@sloppy
+\newif\ifist@english
+\newif\ifist@blankaftertp
+\newcommand\ist@splitabst{}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\ifist@longline}
+%\begin{macro}{\ifist@counttitlepage}
+%\begin{macro}{\ifist@simpletitlepage}
+%v1.3 で追加されたオプションに対するもの.
+%\changes{v1.3}{2009/01/22}
+%  {`ifist@longline 追加, `ifist@prodigal 廃止.}
+%\changes{v1.3a}{2009/02/14}
+%  {`ifist@counttitlepage, `ifist@bindoffset 追加.}
+%\changes{v1.3a}{2009/03/11}
+%  {`ifist@simpletitlepage 追加.}
+%    \begin{macrocode}
+\newif\ifist@longline
+\newif\ifist@counttitlepage
+\newif\ifist@bindoffset
+\newif\ifist@simpletitlepage
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\bindoffset}
+%「綴じ」のために必要な用紙の端の幅。
+%\changes{v1.3}{2009/01/22}
+%  {`binfoffset 追加,}
+%    \begin{macrocode}
+\newlength\bindoffset
+%    \end{macrocode}
+%\end{macro}
+%
+%^^A----------------
+%\subsection{オプションの宣言}
+%
+%原稿サイズについての変更点は \ref{sec:Intro} 節で述べた通り.
+%    \begin{macrocode}
+\DeclareOption{a4paper}
+   {\setlength\paperheight {297mm}%
+    \setlength\paperwidth  {210mm}}
+\DeclareOption{b4paper}
+   {\setlength\paperheight {364mm}%
+    \setlength\paperwidth  {257mm}}
+\DeclareOption{letterpaper}
+   {\setlength\paperheight {11in}%
+    \setlength\paperwidth  {8.5in}}
+\DeclareOption{legalpaper}
+   {\setlength\paperheight {14in}%
+    \setlength\paperwidth  {8.5in}}
+%    \end{macrocode}
+%
+%以下のものは \PKN{report} と同じ.
+%    \begin{macrocode}
+\DeclareOption{10pt}{\renewcommand\@ptsize{0}}
+\DeclareOption{11pt}{\renewcommand\@ptsize{1}}
+\DeclareOption{12pt}{\renewcommand\@ptsize{2}}
+\DeclareOption{oneside}{\@twosidefalse \@mparswitchfalse}
+\DeclareOption{twoside}{\@twosidetrue  \@mparswitchtrue}
+\DeclareOption{draft}{\setlength\overfullrule{5pt}}
+\DeclareOption{final}{\setlength\overfullrule{0pt}}
+\DeclareOption{openright}{\@openrighttrue}
+\DeclareOption{openany}{\@openrightfalse}
+\DeclareOption{onecolumn}{\@twocolumnfalse}
+\DeclareOption{twocolumn}{\@twocolumntrue}
+\DeclareOption{leqno}{\input{leqno.clo}}
+\DeclareOption{fleqn}{\input{fleqn.clo}}
+\DeclareOption{openbib}{%
+  \AtEndOfPackage{%
+   \renewcommand\@openbib@code{%
+      \advance\leftmargin\bibindent
+      \itemindent -\bibindent
+      \listparindent \itemindent
+      \parsep \z@
+      }%
+   \renewcommand\newblock{\par}}%
+}
+%    \end{macrocode}
+%
+%|senior| 等のオプションの処理.
+%\changes{v1.1a}{2005/02/24}
+%  {interim, sloppy 追加.}
+%    \begin{macrocode}
+\DeclareOption{senior}%
+  {\@seniorthesistrue \@masterthesisfalse \@doctorthesisfalse}
+\DeclareOption{master}%
+  {\@seniorthesisfalse \@masterthesistrue \@doctorthesisfalse}
+\DeclareOption{doctor}%
+  {\@seniorthesisfalse \@masterthesisfalse \@doctorthesistrue}
+\DeclareOption{interim}{\ist@interimtrue}
+\DeclareOption{gradiss}{\ist@gradisstrue}
+\DeclareOption{sloppy}{\ist@sloppytrue}
+%    \end{macrocode}
+%
+%v1.1d で追加されたオプションの処理.
+%\changes{v1.1d}{2005/02/28}
+%  {prodigal, splitabst 追加.}
+%\changes{v1.1d}{2005/03/03}
+%  {english 追加.}
+%    \begin{macrocode}
+\DeclareOption{splitabst}{\renewcommand\ist@splitabst{s}}
+\DeclareOption{nosplitabst}{\renewcommand\ist@splitabst{n}}
+\DeclareOption{autosplitabst}{\renewcommand\ist@splitabst{a}}
+\DeclareOption{english}{\ist@englishtrue}
+%    \end{macrocode}
+%
+%v1.3 で追加されたオプションの処理.
+%\changes{v1.3}{2009/01/22}
+%  {longline 追加, prodigal 廃止.}
+%\changes{v1.3a}{2009/02/14}
+%  {counttitlepage, nocounttitlepage, nobindoffset 追加.}
+%\changes{v1.3a}{2009/03/11}
+%  {simpletitlepage 追加.}
+%    \begin{macrocode}
+\DeclareOption{longline}{\ist@longlinetrue}
+\DeclareOption{counttitlepage}{\ist@counttitlepagetrue}
+\DeclareOption{nocounttitlepage}{\ist@counttitlepagefalse}
+\ist@bindoffsettrue
+\DeclareOption{nobindoffset}{\ist@bindoffsetfalse}
+\DeclareOption{prodigal}{% now invalid
+  \ist@fatalerror{You should not be prodigal in today's world!}}
+\DeclareOption{simpletitlepage}{\ist@simpletitlepagetrue}
+%    \end{macrocode}
+%
+%\subsection{オプションの実行}
+%
+%既定値の設定, およびオプションの処理の実行.
+%v1.1a からは |draft| を既定値とする.
+%\changes{v1.1a}{2005/02/24}
+%  {draft を既定値にする.}
+%\changes{v1.1a}{2005/02/24}
+%  {senior を既定値にしない.}
+%\changes{v1.3}{2009/01/22}
+%  {基底フォントサイズの既定値を 10pt から 11pt に変更.}
+%    \begin{macrocode}
+\ExecuteOptions{a4paper,11pt,oneside,onecolumn,draft,openany,%
+            autosplitabst,counttitlepage}
+\ProcessOptions
+%    \end{macrocode}
+%
+%|senior|, |master|, |doctor| のどれも指定されていない場合
+%はエラー終了する.
+%    \begin{macrocode}
+\if@seniorthesis\else \if@masterthesis\else
+  \if@doctorthesis\else
+    \ist@fatalerror{%
+      None of `senior', `master', or `doctor'\MessageBreak
+      is specified as option}
+\fi\fi\fi
+%    \end{macrocode}
+%
+%\begin{macro}{\ifist@carepage}
+%|\ifist@carepage| は |twoside| と |openright| のいずれかが
+%指定されている場合に真となる.
+%これが真の場合には, むやみにページ番号(|\c@page|)を
+%リセットすることができない.
+%\changes{v1.1c}{2005/02/27}
+%  {`ifist@carepage 追加.}
+%    \begin{macrocode}
+\newif\ifist@carepage
+\if@twoside \ist@carepagetrue \fi
+\if@openright \ist@carepagetrue \fi
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\ist@engine}
+%|\ist@engine| は用いている \TeX\ の種類を表す:
+%|p| = \pTeX, |j| = \JTeX, |e| = 欧文 \TeX.
+%これが |e| の時は, 自動的に |english| モードにする.
+%\changes{v1.1d}{2005/03/03}
+%  {`ist@engine 追加.}
+%    \begin{macrocode}
+\newcommand\ist@engine{e}
+\@ifundefined{inhibitglue}{}{\renewcommand\ist@engine{p}}
+\@ifundefined{jendlinetype}{}{\renewcommand\ist@engine{j}}
+\if e\ist@engine \ist@englishtrue \fi
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\switchinterim}
+%|\switchinterim{|\meta{yes}|}{|\meta{no}|}|: \SpGlue
+%|interim| 指定時は \meta{yes}, それ以外は \meta{no} に
+%展開される.
+%\changes{v1.1f}{2005/12/25}
+%  {`switchinterim, `switchenglish 追加.}
+%    \begin{macrocode}
+\newcommand\switchinterim[2]{%
+  \ifist@interim #1\else #2\fi
+}
+%    \end{macrocode}
+%\end{macro}
+%\begin{macro}{\switchenglish}
+%|\switchenglish{|\meta{yes}|}{|\meta{no}|}|: \SpGlue
+%|english| 指定時は \meta{yes}, それ以外は \meta{no} に
+%展開される.
+%    \begin{macrocode}
+\newcommand\switchenglish[2]{%
+  \ifist@english #1\else #2\fi
+}
+%    \end{macrocode}
+%\end{macro}
+%
+%\changes{v1.3a}{2009/03/11}
+%  {`blankaftertp を新設.}
+%\begin{macro}{\blankaftertp}
+%\begin{macro}{\noblankaftertp}
+%|\blankaftertp|/|\noblankaftertp|: \SpGlue
+%表紙ページ直後の空白ページの挿入を有効/無効にする.
+%    \begin{macrocode}
+\newcommand\blankaftertp{%
+  \ist@blankaftertptrue
+}\newcommand\noblankaftertp{%
+  \ist@blankaftertpfalse
+}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%
+%
+%\subsection{フォント}
+%
+%この小節の設定および後の設定の一部は, 元々の \PKN{report} では\ 
+%|sizeXX.clo| (\PKN{j-report} では |j-sizeXX.clo|,
+%|XX| は基底フォントサイズ) という補助ファイルから読み込んでいたが,
+%ここでは, |\@ptsize| の値による条件分岐をして設定を仕分ける
+%ことにする.
+%こうしても問題はないと思う.
+%\changes{v1.3}{2009/01/22}
+%  {行送りを全面的に report に合わせる.}
+%
+%最初に基底フォントサイズオプションが |10pt| の時の設定.
+%    \begin{macrocode}
+\if0\@ptsize\relax            %--------- 10pt
+%    \end{macrocode}
+%
+%フォントサイズ指定のユーザ命令では,
+%同時に行送りの大きさも指定する.
+%以下では, \PKN{report} の値をそのまま用いている.
+%\par\noindent ※\quad
+%v1.1 以前の時代は学位論文の体裁として「ダブルスペース」
+%(タイプライタにおいて改行を二重に行う)
+%が要請されていた.
+%タイプ打ちでない通常の組版においてダブルスペースが何を意味するか
+%は微妙な話であるが, v1.1 では和文用(\PKN{j-report})の行送りの
+%設定値を全面的に採用していた.\footnote
+%{\texttt{10pt} の \texttt{normalsize} での \PKN{j-report} の
+%行送りは 16.8\,pt である. 本来の「ダブルスペース」だと 20\,pt
+%だから随分違う. これは \PKN{setspace} 等のパッケージを
+%参考にした際の作者(八登)の勘違いに起因する.}
+%現在は, この時代錯誤的な「ダブルスペース」の要請が削除されて
+%いるので, 普通の欧文の行送りに従えばよい.
+%
+%\begin{macro}{\normalsize}
+%\begin{macro}{\small}
+%\begin{macro}{\footnotesize}
+%|10pt| の場合の設定.
+%レイアウト設定を伴うもの.
+%    \begin{macrocode}
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize\@xpt\@xiipt
+   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listI}
+\normalsize
+\newcommand\small{%
+   \@setfontsize\small\@ixpt{11}%
+   \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus2\p@
+   \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 4\p@ \@plus2\p@ \@minus2\p@
+               \parsep 2\p@ \@plus\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\newcommand\footnotesize{%
+   \@setfontsize\footnotesize\@viiipt{9.5}%
+   \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus\p@
+   \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 3\p@ \@plus\p@ \@minus\p@
+               \parsep 2\p@ \@plus\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\begin{macro}{\scriptsize}
+%\begin{macro}{\tiny}
+%\begin{macro}{\large}
+%\begin{macro}{\Large}
+%\begin{macro}{\huge}
+%\begin{macro}{\Huge}
+%伴わないもの.
+%    \begin{macrocode}
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
+\newcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
+\newcommand\large{\@setfontsize\large\@xiipt{14}}
+\newcommand\Large{\@setfontsize\Large\@xivpt{18}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xviipt{22}}
+\newcommand\huge{\@setfontsize\huge\@xxpt{25}}
+\newcommand\Huge{\@setfontsize\Huge\@xxvpt{30}}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\textwidth}
+%\begin{macro}{\topskip}
+%\begin{macro}{\marginparsep}
+%\begin{macro}{\marginparpush}
+%\noindent ($*$)
+%ここで基底サイズに依存する他の長さ変数を設定する.
+%
+%|\textwidth| は本文領域の幅で, 既定の設定(学位論文用の設定)で
+%はここで設定された値がそのまま使われる.
+%欧文の組版の場合, 行の長さは大体英小文字 65 字分が理想と
+%され, 長くても 75 字を超えてはならないとされる.
+%ただし, 読む人が慣れている場合に限り 80 文字まで可とされる
+%\footnote{\PKN{KOMA-script} クラスのドキュメント参照.
+%  計算機科学関連の書籍では行長が長いものが多く散見される.}.
+%以上の事情を勘案した結果,
+%このクラスでは, なるべく版面を大きくとれるように,
+%行長を 80 文字相当の長さにした.
+%算出方法は, \PKN{memoir} クラスの方法を適用した場合の Computer Modern
+%の「65 字相当幅」の 80/65 倍を超えない最大の 12\,pt (= 1\,pc) の
+%整数倍とした.
+%\changes{v1.3}{2009/01/22}
+%  {`textwidth の既定値を 75 字幅とする.}
+%\changes{v1.3a}{2009/02/11}
+%  {計算を間違っていたので修正.}
+%\iffalse
+%   F    Laz     L65     L    N      F=基底フォントサイズ
+%  10pt 127.58  293.94  360  79.6    Laz= abc..xyz の幅
+%  11pt 139.70  318.69  384  78.3    L65= 65字相当幅
+%  12pt 149.88  339.46  408  78.1%   L= 行長 / N= 文字数
+%  L65 = 2.042 Laz + 33.41 ; L = floor(L65*80/65/12)*12
+%\fi
+%    \begin{macrocode}
+\setlength\textwidth{360\p@}
+\setlength\topskip{10\p@}
+\setlength\marginparsep{11\p@}
+\setlength\marginparpush{5\p@}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%以上で |10pt| の場合の設定は終わり.
+%
+%続いて |11pt| の場合.
+%説明は |10pt| の時と同じなので省略.
+%    \begin{macrocode}
+\else\if1\@ptsize\relax       %--------- 11pt
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize\@xipt{13.6}%
+   \abovedisplayskip 11\p@ \@plus3\p@ \@minus6\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6.5\p@ \@plus3.5\p@ \@minus3\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listI}
+\normalsize
+\newcommand\small{%
+   \@setfontsize\small\@xpt\@xiipt
+   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 6\p@ \@plus2\p@ \@minus2\p@
+               \parsep 3\p@ \@plus2\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\newcommand\footnotesize{%
+   \@setfontsize\footnotesize\@ixpt{11}%
+   \abovedisplayskip 8\p@ \@plus2\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus\p@
+   \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 4\p@ \@plus2\p@ \@minus2\p@
+               \parsep 2\p@ \@plus\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viiipt{9.5}}
+\newcommand\tiny{\@setfontsize\tiny\@vipt\@viipt}
+\newcommand\large{\@setfontsize\large\@xiipt{14}}
+\newcommand\Large{\@setfontsize\Large\@xivpt{18}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xviipt{22}}
+\newcommand\huge{\@setfontsize\huge\@xxpt{25}}
+\newcommand\Huge{\@setfontsize\Huge\@xxvpt{30}}
+\setlength\textwidth{384\p@}
+\setlength\topskip{11\p@}
+\setlength\marginparsep{10\p@}
+\setlength\marginparpush{5\p@}
+%    \end{macrocode}
+%最後に |12pt| の場合.
+%    \begin{macrocode}
+\else                         %--------- 12pt
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize\@xiipt{14.5}%
+   \abovedisplayskip 12\p@ \@plus3\p@ \@minus7\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6.5\p@ \@plus3.5\p@ \@minus3\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listI}
+\normalsize
+\newcommand\small{%
+   \@setfontsize\small\@xipt{13.6}%
+   \abovedisplayskip 11\p@ \@plus3\p@ \@minus6\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6.5\p@ \@plus3.5\p@ \@minus3\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 9\p@ \@plus3\p@ \@minus5\p@
+               \parsep 4.5\p@ \@plus2\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\newcommand\footnotesize{%
+   \@setfontsize\footnotesize\@xpt\@xiipt
+   \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 6\p@ \@plus2\p@ \@minus2\p@
+               \parsep 3\p@ \@plus2\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viiipt{9.5}}
+\newcommand\tiny{\@setfontsize\tiny\@vipt\@viipt}
+\newcommand\large{\@setfontsize\large\@xivpt{18}}
+\newcommand\Large{\@setfontsize\Large\@xviipt{22}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xxpt{25}}
+\newcommand\huge{\@setfontsize\huge\@xxvpt{30}}
+\let\Huge=\huge
+\setlength\textwidth{408\p@}
+\setlength\topskip{12\p@}
+\setlength\marginparsep{10\p@}
+\setlength\marginparpush{7\p@}
+\fi\fi                        %---------
+%    \end{macrocode}
+%以上で基底フォントサイズ依存部分は一旦終了.
+%
+%\changes{v1.1a}{2005/02/24}
+%  {`isttitlesize 追加.}
+%\begin{macro}{\isttitlesize}
+%タイトル用のフォントサイズ.
+%基底フォントサイズに依らないようにする.
+%内容は |10ot| の |\Large| と同じ.
+%    \begin{macrocode}
+\newcommand\isttitlesize{\@setfontsize\isttitlesize\@xivpt{25.2}}
+%    \end{macrocode}
+%\end{macro}
+%
+%\qparag{和文フォントの代替設定}
+%和文フォントについての「代替されました」の警告メッセージを
+%止めるために, 明示的な代替設定をしておく.
+%\changes{v1.1a}{2005/02/24}
+%  {和文フォントの明示的な代替の設定.}
+%    \begin{macrocode}
+\if p\ist@engine\relax
+\DeclareFontShape{JY1}{mc}{m}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT1}{mc}{m}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JY1}{mc}{m}{sc}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT1}{mc}{m}{sc}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JY1}{mc}{m}{sl}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT1}{mc}{m}{sl}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JY1}{mc}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{mc}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{mc}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{mc}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{mc}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{mc}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{gt}{m}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{gt}{m}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{gt}{m}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{gt}{m}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{gt}{m}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{gt}{m}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{gt}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{gt}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{gt}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{gt}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{gt}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{gt}{bx}{sl}{<->ssub*gt/m/n}{}
+\fi
+%    \end{macrocode}
+%
+%
+%^^A----------------
+%\subsection{文書レイアウト}
+%
+%\begin{macro}{\bindoffset}
+%「綴じ」に必要な幅の設定.
+%    \begin{macrocode}
+\ifist@bindoffset
+  \setlength{\bindoffset}{9mm}
+\else
+  \setlength{\bindoffset}{0pt}
+\fi
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\lineskip}
+%\begin{macro}{\normallineskip}
+%\begin{macro}{\baselinestretch}
+%\begin{macro}{\parskip}
+%\qparag{段落}
+%これらは \PKN{report} のまま.
+%    \begin{macrocode}
+\setlength\lineskip{1\p@}
+\setlength\normallineskip{1\p@}
+\renewcommand\baselinestretch{}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+
+%\begin{macro}{\parindent}
+%段落下げは 1.5\,em (二段組では 1\,em) に統一した.
+%これは \PKN{report} の値とほぼ同じ.
+%v1.0 では \PKN{j-report} のままの 1\,zw となっていたが,
+%これは明らかに不合理.
+%    \begin{macrocode}
+\setlength\parskip{0\p@ \@plus \p@}
+\if@twocolumn
+  \setlength\parindent{1em}
+\else
+  \setlength\parindent{1.5em}
+\fi
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\smallskipamount}
+%\begin{macro}{\medskipamount}
+%\begin{macro}{\bigskipamount}
+%\begin{macro}{\@lowpenalty}
+%\begin{macro}{\@medpenalty}
+%\begin{macro}{\@highpenalty}
+%\PKN{report} のまま.
+%    \begin{macrocode}
+\setlength\smallskipamount{3\p@ \@plus 1\p@ \@minus 1\p@}
+\setlength\medskipamount{6\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\bigskipamount{12\p@ \@plus 4\p@ \@minus 4\p@}
+\@lowpenalty   51
+\@medpenalty  151
+\@highpenalty 301
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\headheight}
+%\begin{macro}{\headsep}
+%\begin{macro}{\footskip}
+%\begin{macro}{\maxdepth}
+%\qparag{縦方向の空き}
+%|\headsep| を小さくした以外は \PKN{report} のまま.
+%|\topskip| は ($*$) で設定済.
+%\changes{v1.3}{2009/01/22}
+%  {`headsep を変更.}
+%    \begin{macrocode}
+\setlength\headheight{12\p@}
+\setlength\headsep   {12\p@}
+% \topskip is already set
+\setlength\footskip{30\p@}
+\setlength\maxdepth{.5\topskip}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\textwidth}
+%\qparag{テキスト領域の大きさ}
+%幅の設定.
+%この時点で |\textwidth| には ($*$) で設定した値が入っている.
+%二段組(|twocolumn|)または |longline| 設定時は, 
+%マージンを綴じを除いた紙面の幅の 1/6 とする.
+%すなわち |\textwidth|
+%を (|\paperwidth| $-$ |\bindoffset|) $\times$ 5/6 ($\dagger$)とする.
+%それ以外の場合は, ($*$) と ($\dagger$) のうち小さい方とする.
+%\changes{v1.3}{2009/01/22}
+%  {`textwidth の設定方法を変更.}
+%    \begin{macrocode}
+\setlength\@tempdima{\paperwidth}
+\addtolength\@tempdima{-\bindoffset}
+\setlength\@tempdima{.833333\@tempdima}
+\if@twocolumn
+  \setlength\textwidth\@tempdima
+\else\ifist@longline
+  \setlength\textwidth\@tempdima
+\else\ifdim\textwidth>\@tempdima\relax
+  \setlength\textwidth\@tempdima
+\fi\fi\fi
+\@settopoint\textwidth
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\textheight}
+%テキスト領域の高さの設定.
+%用紙の高さの 1/6 をマージンとする.
+%\PKN{report} では, ここでヘッダ・フッタの領域として 1.5\,in
+%を確保しているが, このクラスではヘッダ・フッタの領域をとらない.
+%つまり, テキスト領域の外側に配置される.
+%\changes{v1.3}{2009/01/22}
+%  {`textheight の設定方法を変更.}
+%\changes{v1.3a}{2009/02/14}
+%  {`textheight の設定方法を変更.}
+%    \begin{macrocode}
+\setlength\@tempdima{.833333\paperheight}
+\divide\@tempdima\baselineskip
+\@tempcnta=\@tempdima
+\setlength\textheight{\@tempcnta\baselineskip}
+\addtolength\textheight{\topskip}
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\marginparsep}
+%\qparag{マージン}
+%\PKN{report} のまま.
+%|\marginparpush| は ($*$) で設定済み.
+%    \begin{macrocode}
+\if@twocolumn
+ \setlength\marginparsep {10\p@}
+\else
+% \marginparsep is unchanged
+\fi
+% \marginparpush is already set
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\oddsidemargin}
+%\begin{macro}{\evensidemargin}
+%\begin{macro}{\marginparwidth}
+%これらの値は |\textwidth| から算出される.
+%    \begin{macrocode}
+\if@twoside
+  \setlength\@tempdima        {\paperwidth}
+  \addtolength\@tempdima      {-\bindoffset}
+  \addtolength\@tempdima      {-\textwidth}
+  \setlength\oddsidemargin    {.333333\@tempdima}
+  \addtolength\oddsidemargin  {-1in}
+  \addtolength\oddsidemargin  {\bindoffset}
+  \setlength\evensidemargin   {.666667\@tempdima}
+  \addtolength\evensidemargin {-1in}
+  \setlength\marginparwidth   {.666667\@tempdima}
+  \addtolength\marginparwidth {-\marginparsep}
+  \addtolength\marginparwidth {-0.4in}
+\else
+  \setlength\@tempdima        {\paperwidth}
+  \addtolength\@tempdima      {-\bindoffset}
+  \addtolength\@tempdima      {-\textwidth}
+  \setlength\oddsidemargin    {.5\@tempdima}
+  \addtolength\oddsidemargin  {-1in}
+  \addtolength\oddsidemargin  {\bindoffset}
+  \setlength\marginparwidth   {.5\@tempdima}
+  \addtolength\marginparwidth {-\marginparsep}
+  \addtolength\marginparwidth {-0.4in}
+  \addtolength\marginparwidth {-.4in}
+  \setlength\evensidemargin   {\oddsidemargin}
+\fi
+\ifdim \marginparwidth >2in
+   \setlength\marginparwidth{2in}
+\fi
+\@settopoint\oddsidemargin
+\@settopoint\marginparwidth
+\@settopoint\evensidemargin
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\topmargin}
+%これらの値は |\textheight| から算出される.
+%\PKN{report} とは異なり, 中央合わせの際にヘッダ・フッタ部分を
+%含めないようにしている.
+%\changes{v1.3}{2009/01/22}
+%  {`topmargin の算出方法を変更.}
+%\changes{v1.3a}{2009/02/14}
+%  {`topmargin の算出方法を変更.}
+%    \begin{macrocode}
+\setlength\@tempdima{\paperheight}
+\addtolength\@tempdima{-\textheight}
+\setlength\topmargin{.4\@tempdima}
+\addtolength\topmargin{-1in}
+\addtolength\topmargin{-\headheight}
+\addtolength\topmargin{-\headsep}
+\@settopoint\topmargin
+%    \end{macrocode}
+%\end{macro}
+%
+%\qparag{脚注}
+%|\footnotesep|, |\skip\footins| の設定は後回し.
+%
+%^^A---------------
+%\subsection{フロートの設定}
+%
+%\qparag{許容範囲}
+%これは \PKN{jsarticle} に合わせるように変更した.
+%元よりもフロートが入りやすくなるはず.
+%    \begin{macrocode}
+\setcounter{topnumber}{2}
+\renewcommand\topfraction{.8}
+\setcounter{bottomnumber}{1}
+\renewcommand\bottomfraction{.8}
+\setcounter{totalnumber}{3}
+\renewcommand\textfraction{.1}
+\renewcommand\floatpagefraction{.8}
+\setcounter{dbltopnumber}{2}
+\renewcommand\dbltopfraction{.8}
+\renewcommand\dblfloatpagefraction{.8}
+%    \end{macrocode}
+%
+%残りの設定は基底フォントサイズに依存するので後回し.
+%
+%^^A----------------
+%\subsection{ページスタイル}
+%すなわちヘッダ・フッタの設定.
+%
+%|headings| スタイルの設定は,
+%v1.0 では \PKN{j-report} と同じであったが,
+%今では \PKN{report} と同じ.
+%    \begin{macrocode}
+\if@twoside
+  \def\ps@headings{%
+      \let\@oddfoot\@empty\let\@evenfoot\@empty
+      \def\@evenhead{\thepage\hfil\slshape\leftmark}%
+      \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+      \let\@mkboth\markboth
+    \def\chaptermark##1{%
+      \markboth {\MakeUppercase{%
+        \ifnum \c@secnumdepth >\m@ne
+          \if@mainmatter
+            \@chapapp\ \thechapter. \ %
+          \fi
+        \fi
+        ##1}}{}}%
+    \def\sectionmark##1{%
+      \markright {\MakeUppercase{%
+        \ifnum \c@secnumdepth >\z@
+          \thesection. \ %
+        \fi
+        ##1}}}}
+\else
+  \def\ps@headings{%
+    \let\@oddfoot\@empty
+    \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+    \let\@mkboth\markboth
+    \def\chaptermark##1{%
+      \markright {\MakeUppercase{%
+        \ifnum \c@secnumdepth >\m@ne
+          \if@mainmatter
+            \@chapapp\ \thechapter. \ %
+          \fi
+        \fi
+        ##1}}}}
+\fi
+\def\ps@myheadings{%
+    \let\@oddfoot\@empty\let\@evenfoot\@empty
+    \def\@evenhead{\thepage\hfil\slshape\leftmark}%
+    \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+    \let\@mkboth\@gobbletwo
+    \let\chaptermark\@gobble
+    \let\sectionmark\@gobble
+    }
+%    \end{macrocode}
+%
+%\begin{macro}{\ist@saveps}
+%\begin{macro}{\ist@restoreps}
+%|\ist@saveps|\,/\,|\ist@restoreps| は現在のページスタイルを
+%退避/復帰する.
+%\changes{v1.1c}{2005/02/27}
+%  {`ist@saveps, `ist@restoreps 追加.}
+%    \begin{macrocode}
+\newcommand\ist@saveps{%
+  \let\ist@mkboth\@mkboth
+  \let\ist@oddhead\@oddhead\let\ist@oddfoot\@oddfoot
+  \let\ist@evenhead\@evenhead\let\ist@evenfoot\@evenfoot
+}
+\newcommand\ist@restoreps{%
+  \let\@mkboth\ist@mkboth
+  \let\@oddhead\ist@oddhead\let\@oddfoot\ist@oddfoot
+  \let\@evenhead\ist@evenhead\let\@evenfoot\ist@evenfoot
+}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%
+%^^A----------------
+%\subsection{文書マークアップ}
+%
+%\qparag{タイトル}
+%すなわち学位論文の表紙のページ.
+%\PKN{report} で |titlepage| オプションを指定したのと同様に,
+%常に独立のページに出力される,
+%v1.1a〜1.1c で全面的な見直しを行った.
+%\changes{v1.1a}{2005/02/24}
+%  {`maketitle についていろいろと変更.}
+%\changes{v1.1b}{2005/02/25}
+%  {`maketitle についてさらにと変更.}
+%\changes{v1.1c}{2005/02/27}
+%  {`maketitle の処理の大部分を下請け命令に移した.}
+%\changes{v1.1c}{2005/02/27}
+%  {要旨の出力方法を大幅に変更.}
+%\changes{v1.1f}{2005/12/25}
+%  {表紙と要旨の命令の分離. `maketitle はそれらを呼ぶだけ.}
+%\begin{macro}{\maketitle}
+%|\maketitlepage| による表紙出力の直後に\ 
+%|\makeabstract| による要旨出力を行う
+%(v1.1f よりこの 2 命令を新設).
+%表紙と要旨の間には通常は空白のページが置かれる(v1.0 と同様)が,
+%|interim| 指定の場合は置かれない.
+%^^A#v1.1c において, 実際に表紙を出力する部分を |\ist@maketitle| に,
+%^^A#要旨を出力する部分を |\ist@showabstract| に移した.
+%^^A#(設定変更を容易にするため.)
+%\changes{v1.3}{2009/02/14}
+%  {ページ番号の数え方を変更.}
+%    \begin{macrocode}
+\newcommand\maketitle{%
+  \pagenumbering{roman}%
+  \maketitlepage
+  \ist@putblankpage
+  \ifist@counttitlepage\else \setcounter{page}\@ne \fi
+  \makeabstract
+}
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{environment}{ist@titlepage}
+%ページ番号をリセットしない |titlepage| 環境.
+%    \begin{macrocode}
+\newenvironment{ist@titlepage}
+ {\ifist@carepage \cleardoublepage \fi
+  \if@twocolumn \@restonecoltrue\onecolumn
+  \else \@restonecolfalse\newpage
+  \fi       	
+  \thispagestyle{empty}}
+ {\if@restonecol \twocolumn
+  \else \newpage \fi}
+%    \end{macrocode}
+%\end{environment}
+%
+%\begin{macro}{\ist@putblankpage}
+%空白のページを出力するための処理.
+%(v1.0 でなぜ空白ページを置くのかは未だ不明.)
+%    \begin{macrocode}
+\newcommand\ist@putblankpage{%
+  \ifist@interim \ist@blankaftertpfalse \fi
+  \ifist@carepage \ist@blankaftertptrue \fi
+  \ifist@blankaftertp
+    \null\vfil \thispagestyle{empty}% make an empty page
+    \newpage
+  \fi
+}
+%    \end{macrocode}
+%\end{macro}
+%\begin{macro}{\maketitlepage}
+%|\etitle|, |\date| 等を設定した後に |\maketitlepage| を実行すると,
+%論文の表紙が出力される.
+%\changes{v1.1f}{2005/12/25}
+%  {`maketitlepage 追加.}
+%    \begin{macrocode}
+\newcommand\maketitlepage{%
+  \ist@maketitle
+  \ist@maketitle@post
+}
+%    \end{macrocode}
+%\end{macro}
+%\begin{macro}{\makeabstract}
+%|eabstract| および |jabstract| 環境
+%を用いて入力された要旨(英文および和文)が出力される.
+%\changes{v1.1f}{2005/12/25}
+%  {`makeabstract 追加.}
+%    \begin{macrocode}
+\newcommand\makeabstract{%
+  \ist@showabstract
+  \ist@showabstract@post
+}
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\ist@maketitle}
+%実際に表紙のページを出力する命令.
+%学位論文が共著になるわけがないので,
+%|\and| を廃止して定義を単純にした.
+%1 つのブロック内の行送りが常に |\isttitlesize| で設定した
+%ものになるようにした.
+%今の設定では, タイトルは 12 行(英文・和文あわせて)まで書ける.
+%    \begin{macrocode}
+\newcommand\ist@maketitle{\begin{ist@titlepage}%
+  \let\footnotesize\small
+  \let\footnoterule\relax
+  \let \footnote \thanks
+  \null\vskip-100\p@\@plus1fill\null
+  \centering\isttitlesize
+    {\ist@hookcr\@etitle}\par
+    {\@jtitle}\par
+    \vskip 20\p@
+    by\par
+    \vskip 10\p@
+    {\@eauthor\\\@jauthor}\par
+    \vskip 30\p@
+    \ifist@interim
+      {\einterimname\\\jinterimname}\par
+    \else
+      {\ethesisname\\\jthesisname}\par
+    \fi
+    \vskip 80\p@
+    {\ist@submittedtoblock}\par
+    \vskip 20\p@
+    {Thesis Supervisor: \@esupervisor \quad \@jsupervisor\\
+     \@supervisortitleline}\par
+  \vskip-\footskip
+  \vskip-100\p@\@plus1fill\null
+  \end{ist@titlepage}%
+  \setcounter{footnote}{0}%
+}
+%    \end{macrocode}
+%\end{macro}
+%\begin{macro}{\ist@hookcr}
+%|\etitle| で |\\|(強制改行)を使うとエラーになることへの対処.
+%\changes{v1.1g}{2006/06/29}
+%  {`ist@hookcr 等を追加.}
+%    \begin{macrocode}
+\def\ist@hookcr{%
+  \let\ist@curcr\\\def\\{\protect\ist@curcr}}
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\ist@showabstract}
+%実際に要旨を出力する命令.
+%
+%\noindent ※ 要旨の処理について:\quad
+%\label{anc:abstract}
+%従来の処理では, まず |ebastract|, |jabstract| 環境で
+%各内容を box register に代入して, |\maketitle| において
+%その register の中身を出力するという方法をとっていた.
+%しかし, その際に中に入れる box として |minipage| 環境を
+%中に含んだ |\hbox| を用いていたので, その結果,
+%要旨環境の中での改ページが禁止されていた.
+%これは「和文と英文の両方が 1 ページに収まらない場合は,
+%別ページに分ける」
+%という処理を実現するためだと思われる,
+%しかし, これだと, 和文だけで 1 ページ分の量を超える
+%場合には, その出力がテキスト領域(さらに多いと紙面自体)を
+%はみ出してしまう.
+%
+%これに対処するために, 用いる box を |\vbox| にして,
+%さらに, |\unvbox| で出力することで, 要旨の途中で
+%改ページができるようにした.
+%そして, 要旨が長い時に別ページにする機能に対応するため,
+%事前に 2 つの box の高さの合計を調べて処理を分けている.
+%(この処理の妥当性については自信がないので, \TeX\ に
+%詳しい方は再検討してください.)
+%    \begin{macrocode}
+\newcommand\ist@showabstract{%
+%    \end{macrocode}
+%英文と和文の要旨の間に入る垂直空きの量.
+%    \begin{macrocode}
+  \setlength{\@tempskipb}{36\p@\@minus24\p@}
+%    \end{macrocode}
+%|autosplitabst| 指定時は,
+%(英文要旨の縦幅) + (和文要旨の縦幅) + (挿入する空きの自然長)
+%が |\textheight| より大きいか小さいかで処理を分ける.
+%大きい場合は, 設定を |splitabst| にする.
+%    \begin{macrocode}
+  \if a\ist@splitabst \relax
+    \setlength\@tempdima{\@tempskipb}%
+    \addtolength\@tempdima{\ht\eabstractbox}%
+    \addtolength\@tempdima{\dp\eabstractbox}%
+    \addtolength\@tempdima{\ht\jabstractbox}%
+    \addtolength\@tempdima{\dp\jabstractbox}%
+    \ifdim \@tempdima>\textheight
+      \renewcommand\ist@splitabst{s}%
+    \fi
+  \fi
+%    \end{macrocode}
+%|autosplitabst| でかつ要旨が小さい場合の処理:
+%従来通り, |titlepage| 環境を用いて, 両方の要旨を出力する.
+%必ず 1 ページに収まるはず.
+%(こちらの方が後述の方法よりバグが少ないと思われるので,
+%この場合を特別扱いしている.
+%本来は, 後述の場合で処理してかまわない.)
+%    \begin{macrocode}
+  \if a\ist@splitabst \relax
+    \begin{ist@titlepage}%
+      \unvbox\eabstractbox
+      \vskip\@tempskipb
+      \unvbox\jabstractbox
+    \end{ist@titlepage}%
+%    \end{macrocode}
+%残りの場合の処理:
+%要旨が 3 ページ以上になる場合には, ページスタイルの一時的な変更
+%(|empty| に変える)を |titlepage| に任せるという方法が使えない.
+%(2 ページならば, |\end{titlepage| の後で |\thispagestyle{empty}|
+%をすればよい.)
+%仕方がないので, 現在のページスタイルを退避/復帰する命令
+%(|\ist@saveps|\,/\,|\ist@restoreps|)を用意して対処した.
+%この点を除くと, 前処理・後処理は |titlepage| 環境のそれと同じ.
+%|splitabst| 設定時(または |autosplitabst| で要旨が大きい時)は\ 
+%2 つの要旨の出力の間で改ページし,
+%|nosplitabst| 設定時は 2 つの要旨の間に |\@tempskipb| の
+%空きを入れる.
+%    \begin{macrocode}
+  \else
+    \ifist@carepage \cleardoublepage \fi
+    \if@twocolumn \@restonecoltrue\onecolumn
+    \else         \@restonecolfalse\newpage
+    \fi
+    \ist@saveps \pagestyle{empty}%
+    \unvbox\eabstractbox
+    \if s\ist@splitabst\relax \newpage
+    \else  \vskip\@tempskipb
+    \fi
+    \unvbox\jabstractbox
+    \if@restonecol\twocolumn \else \newpage \fi
+    \ist@restoreps
+  \fi
+}
+%    \end{macrocode}
+%\end{macro}
+%
+%\begin{macro}{\ist@submittedtoblock}
+%``Submitted to \ldots'' で始まる文言の内容.
+%    \begin{macrocode}
+\newcommand\ist@submittedtoblock{%
+  Submitted to\\\@submittedto\\
+  \ifist@interim\else on \@date\\\fi
+  in Partial Fulfillment of the Requirements\\
+  for \@degreename
+}
+\if@seniorthesis
+  \newcommand\@submittedto{%
+    the Department of Information Science\\
+    the Faculty of Science, the University of Tokyo}
+  \newcommand\@degreename{%
+    the Degree of \thesisgrade \ of Science}
+\else
+  \newcommand\@submittedto{%
+    the Graduate School of the University of Tokyo}
+  \ifist@gradiss
+    \newcommand\@degreename{%
+      the Degree of \thesisgrade \ of Science\\
+      in Information Science}
+  \else
+    \newcommand\@degreename{%
+      the Degree of \thesisgrade\ 
+      of Information Science and Technology\\
+      in Computer Science}
+  \fi
+\fi
+%    \end{macrocode}
+%\end{macro}
+%
+%
+%\begin{macro}{\ist@maketitle@post}
+%\begin{macro}{\ist@showabstract@post}
+%用済みのマクロを消して記憶領域を空ける.
+%この処理は今では必要ないのかもしれない.
+%    \begin{macrocode}
+\newcommand\ist@maketitle@post{%
+  \global\let\thanks\relax
+  \global\let\@thanks\@empty
+  \global\let\@jauthor\@empty
+  \global\let\@eauthor\@empty
+  \global\let\@date\@empty
+  \global\let\@jtitle\@empty
+  \global\let\@etitle\@empty
+  \global\let\@jsupervisor\@empty
+  \global\let\@esupervisor\@empty
+  \global\let\@supervisortitle\@empty
+  \global\let\@submittedto\@empty
+  \global\let\@degree\@empty
+  \global\let\ist@submittedtoblock\@empty
+  \global\let\einterimname\@empty
+  \global\let\jinterimname\@empty
+  \global\let\ethesisname\@empty
+  \global\let\jthesisname\@empty
+  \global\let\thesisgrade\@empty
+  \global\let\jtitle\relax
+  \global\let\etitle\relax
+  \global\let\jauthor\relax
+  \global\let\eauthor\relax
+  \global\let\jsupervisor\relax
+  \global\let\esupervisor\relax
+  \global\let\supervisortitle\relax
+  \global\let\date\relax
+  %
+  \global\let\maketitle\relax
+  \global\let\maketitlepage\relax
+  \global\let\ist@maketitle\relax
+  \global\let\ist@maketitle@post\relax
+}
+\newcommand\ist@showabstract@post{%
+  \global\let\makeabstract\relax
+  \global\let\ist@putblankpage\relax
+  \global\let\ist@showabstract\relax
+  \global\let\ist@showabstract@post\relax
+}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%
+%\qparag{博士論文の表紙}
+%博士論文を簡易製本する場合は, 表題ページがそのまま表紙になる
+%ので, これを規定の形式に合わせる必要がある.
+%|simpletitlepage| オプションでこれを行える.
+%    \begin{macrocode}
+\ifist@simpletitlepage
+\renewcommand\ist@maketitle{\begin{ist@titlepage}%
+  \let\footnotesize\small
+  \let\footnoterule\relax
+  \let \footnote \thanks
+  \null\vskip 40\p@\null
+  \centering\isttitlesize
+    {\@etitle}\par
+    \vskip 10\p@
+    {\ist@jparen\@jtitle}\par
+    \vfill
+    \@jauthor\par
+  \vskip 10\p@
+  \end{ist@titlepage}%
+  \setcounter{footnote}{0}%
+}
+\fi
+%    \end{macrocode}
+%
+%\qparag{\OPN{english} 設定時の表紙}
+%|english| 設定時の |\ist@maketitle| と |\ist@showabstract|.
+%    \begin{macrocode}
+\ifist@english                %--------- english
+\renewcommand\ist@maketitle{\begin{ist@titlepage}%
+  \let\footnotesize\small
+  \let\footnoterule\relax
+  \let \footnote \thanks
+  \null\vskip-100\p@\@plus1fill\null
+  \centering\isttitlesize
+    {\ist@hookcr\MakeUppercase{\@etitle}}\par
+    \vskip 20\p@
+    by\par
+    \vskip 10\p@
+    {\@eauthor}\par
+    \vskip 30\p@
+    \ifist@interim
+      {\einterimname}\par
+    \else
+      {\ethesisname}\par
+    \fi
+    \vskip 80\p@
+    {\ist@submittedtoblock}\par
+    \vskip 20\p@
+    {Thesis Supervisor: \@esupervisor\\
+     \@supervisortitleline}\par
+  \vskip-\footskip
+  \vskip-100\p@\@plus1fill\null
+  \end{ist@titlepage}%
+  \setcounter{footnote}{0}%
+}
+\renewcommand\ist@showabstract{%
+  \ifist@carepage \cleardoublepage \fi
+  \if@twocolumn \@restonecoltrue\onecolumn
+  \else         \@restonecolfalse\newpage
+  \fi
+  \ist@saveps \pagestyle{empty}%
+  \unvbox\eabstractbox
+  \if@restonecol\twocolumn \else \newpage \fi
+  \ist@restoreps
+}
+\fi                           %---------
+%    \end{macrocode}
+%
+%\qparag{節見出し}
+%カウンタ定義などの準備の部分.
+%\PKN{report} のまま.
+%    \begin{macrocode}
+\newcommand*\chaptermark[1]{}
+\setcounter{secnumdepth}{2}
+\newcounter {part}
+\newcounter {chapter}
+\newcounter {section}[chapter]
+\newcounter {subsection}[section]
+\newcounter {subsubsection}[subsection]
+\newcounter {paragraph}[subsubsection]
+\newcounter {subparagraph}[paragraph]
+\renewcommand \thepart {\@Roman\c@part}
+\renewcommand \thechapter {\@arabic\c@chapter}
+\renewcommand \thesection {\thechapter.\@arabic\c@section}
+\renewcommand\thesubsection   {\thesection.\@arabic\c@subsection}
+\renewcommand\thesubsubsection{\thesubsection .\@arabic\c@subsubsection}
+\renewcommand\theparagraph    {\thesubsubsection.\@arabic\c@paragraph}
+\renewcommand\thesubparagraph {\theparagraph.\@arabic\c@subparagraph}
+\newcommand\@chapapp{\chaptername}
+%    \end{macrocode}
+%
+%
+%\begin{macro}{\frontmatter}
+%\begin{macro}{\mainmatter}
+%\begin{macro}{\backmatter}
+%\PKN{book} で使える「前付け・本文・後付け」の制御を
+%取り入れてみた.
+%\changes{v1.1b}{2005/02/25}
+%  {`mainmatter 等を追加.}
+%    \begin{macrocode}
+\newcommand\frontmatter{%
+  \ist@clearpage
+  \@mainmatterfalse}
+\newcommand\mainmatter{%
+  \ist@clearpage
+  \@mainmattertrue
+  \pagenumbering{arabic}}
+\newcommand\backmatter{%
+  \if@openright
+    \cleardoublepage
+  \else
+    \clearpage
+  \fi
+  \@mainmatterfalse}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\ist@clearpage}
+%|\ist@clearpage| は |twoside| と |openright| のいずれかが
+%指定されていれば |\cleardoublepage|,
+%そうでなければ |\clearpage| を行う.
+%\changes{v1.1b}{2005/02/25}
+%  {`ist@clearpage 追加.}
+%\changes{v1.1c}{2005/02/27}
+%  {`ist@clearpage の定義で `ifist@carepage を用いる.}
+%    \begin{macrocode}
+\newcommand\ist@clearpage{%
+  \ifist@carepage \cleardoublepage \else \clearpage \fi}
+%    \end{macrocode}
+%\end{macro}
+%
+%部(part)の見出し.
+%    \begin{macrocode}
+\newcommand\part{%
+  \if@openright
+    \cleardoublepage
+  \else
+    \clearpage
+  \fi
+  \thispagestyle{plain}%
+  \if@twocolumn
+    \onecolumn
+    \@tempswatrue
+  \else
+    \@tempswafalse
+  \fi
+  \null\vfil
+  \secdef\@part\@spart}
+
+\def\@part[#1]#2{%
+    \ifnum \c@secnumdepth >-2\relax
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+    \markboth{}{}%
+    {\centering
+     \interlinepenalty \@M
+     \normalfont
+     \ifnum \c@secnumdepth >-2\relax
+       \huge\bfseries \partname\nobreakspace\thepart
+       \par
+       \vskip 20\p@
+     \fi
+     \Huge \bfseries #2\par}%
+    \@endpart}
+\def\@spart#1{%
+    {\centering
+     \interlinepenalty \@M
+     \normalfont
+     \Huge \bfseries #1\par}%
+    \@endpart}
+\def\@endpart{\vfil\newpage
+              \if@twoside
+               \if@openright
+                \null
+                \thispagestyle{empty}%
+                \newpage
+               \fi
+              \fi
+              \if@tempswa
+                \twocolumn
+              \fi}
+%    \end{macrocode}
+%
+%章(chapter)の見出し.
+%v1.0 から少し修正して \PKN{report} と同じにした.
+%ただし, 見出しの字の大きさは, \PKN{report} の |\huge| ではなく
+%\PKN{j-report} と同じ |\LARGE| である.
+%ここのフォント設定は \PKN{j-report} では\ 
+%|\chapn@font|, |\chapt@font| というマクロになっていて,
+%後述の |\chapterfont| という命令でこれらの中身が
+%変えられるようになっている.
+%この方式もそのまま引き継いでいる.
+%    \begin{macrocode}
+\newcommand\chapter{\if@openright\cleardoublepage\else\clearpage\fi
+                    \thispagestyle{plain}%
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \secdef\@chapter\@schapter}
+\def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
+                       \if@mainmatter
+                         \refstepcounter{chapter}%
+                         \typeout{\@chapapp\space\thechapter.}%
+                         \addcontentsline{toc}{chapter}%
+                                   {\protect\numberline{\thechapter}#1}%
+                       \else
+                         \addcontentsline{toc}{chapter}{#1}%
+                       \fi
+                    \else
+                      \addcontentsline{toc}{chapter}{#1}%
+                    \fi
+                    \chaptermark{#1}%
+                    \addtocontents{lof}{\protect\addvspace{10\p@}}%
+                    \addtocontents{lot}{\protect\addvspace{10\p@}}%
+                    \if@twocolumn
+                      \@topnewpage[\@makechapterhead{#2}]%
+                    \else
+                      \@makechapterhead{#2}%
+                      \@afterheading
+                    \fi}
+\def\@makechapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+      \if@mainmatter
+        \chapn@font \@chapapp\space \thechapter
+        \par\nobreak
+        \vskip 20\p@
+      \fi
+    \fi
+    \interlinepenalty\@M
+    \chapt@font #1\par\nobreak
+    \vskip 40\p@
+  }}
+\def\@schapter#1{\if@twocolumn
+                   \@topnewpage[\@makeschapterhead{#1}]%
+                 \else
+                   \@makeschapterhead{#1}%
+                   \@afterheading
+                 \fi}
+\def\@makeschapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright
+    \normalfont
+    \interlinepenalty\@M
+    \chapt@font #1\par\nobreak
+    \vskip 40\p@
+  }}
+%    \end{macrocode}
+%
+%\begin{macro}{\chapterfont}
+%|\chapterfont{|\meta{cmd1}|}{|\meta{cmd2}|}|: \SpGlue
+%番号付(|\chapter|)および
+%番号なし(|\chapter*|)の章見出しのフォントをそれぞれ\ 
+%\meta{cmd1} および \meta{cmd2} に設定する.
+%    \begin{macrocode}
+\newcommand*\chapterfont[2]{%
+   \gdef\chapn@font{#1}\gdef\chapt@font{#2}}
+%    \end{macrocode}
+%\end{macro}
+%初期値はともに |\LARGE\bfseries|.
+%    \begin{macrocode}
+\chapterfont{\LARGE\bfseries}{\LARGE\bfseries}
+%    \end{macrocode}
+%
+%節(section)以下の見出し.
+%\PKN{report} (欧文) では |\section| 等の直後の段落下げをしないのに
+%対して, \PKN{j-report} ではする.
+%元の \PKN{is-thesis} (v1.0) ではするように設定されていたが,
+%おそらく欧文ではしないのが普通だと思われるので,
+%しない設定に変更した.
+%(|\@startsection| の第 4 引数を負にすると「しない」になる.)
+%また, 節, 小節, 小々節の見出しの字の大きさも両者で異なり,
+%前述の章と同様にこれも \PKN{j-report} ではカスタマイズ可能
+%となっている.
+%これについては \PKN{j-report} を引き継ぐ.
+%    \begin{macrocode}
+\newcommand\section{\@startsection {section}{1}{\z@}%
+                                   {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                   {2.3ex \@plus.2ex}%
+                                   {\normalfont\sec@font}}
+\newcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\ssec@font}}
+\newcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\sssec@font}}
+\newcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                    {3.25ex \@plus1ex \@minus.2ex}%
+                                    {-1em}%
+                                    {\normalfont\normalsize\bfseries}}
+\newcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}%
+                                       {3.25ex \@plus1ex \@minus .2ex}%
+                                       {-1em}%
+                                      {\normalfont\normalsize\bfseries}}
+%    \end{macrocode}
+%
+%\begin{macro}{\sectionfont}
+%|\sectionfont{|\meta{cmd1}|}{|\meta{cmd2}|}{|\meta{cmd3}|}|: \SpGlue
+%節(|\section|), \SpGlue 小節(|\subsection|), \SpGlue
+%小々節(|\subsubsection|)の見出しのフォントをそれぞれ\ 
+%\meta{cmd1}, \meta{cmd2}, \meta{cmd3} に設定する.
+%    \begin{macrocode}
+\newcommand*\sectionfont[3]{%
+   \gdef\sec@font{#1}\gdef\ssec@font{#2}\gdef\sssec@font{#3}}
+%    \end{macrocode}
+%\end{macro}
+%初期値は節が |\large\bfseries|,
+%小節と小々節が |\normalsize\bfseries|.
+%なお, \PKN{report} ではサイズが順に\ 
+%|\Large|, |\large|, |\normalsize| となっていた.
+%    \begin{macrocode}
+\sectionfont{\large\bfseries}{\normalsize\bfseries}{\normalsize\bfseries}
+%    \end{macrocode}
+%
+%^^A----------------
+%\subsection{リスト}
+%
+%この小節中の全ての設定は \PKN{report}のまま.
+%    \begin{macrocode}
+\if@twocolumn
+  \setlength\leftmargini  {2em}
+\else
+  \setlength\leftmargini  {2.5em}
+\fi
+\leftmargin  \leftmargini
+\setlength\leftmarginii  {2.2em}
+\setlength\leftmarginiii {1.87em}
+\setlength\leftmarginiv  {1.7em}
+\if@twocolumn
+  \setlength\leftmarginv  {.5em}
+  \setlength\leftmarginvi {.5em}
+\else
+  \setlength\leftmarginv  {1em}
+  \setlength\leftmarginvi {1em}
+\fi
+\setlength  \labelsep  {.5em}
+\setlength  \labelwidth{\leftmargini}
+\addtolength\labelwidth{-\labelsep}
+\@beginparpenalty -\@lowpenalty
+\@endparpenalty   -\@lowpenalty
+\@itempenalty     -\@lowpenalty
+%    \end{macrocode}
+%
+%ここより 2 回目(で最後)の
+%基底フォントサイズ依存部分をはじめる.
+%まず |10pt| から.
+%    \begin{macrocode}
+\if0\@ptsize\relax            %--------- 10pt
+%    \end{macrocode}
+%
+%まずは落穂拾い.
+%脚注関係の設定.
+%    \begin{macrocode}
+\setlength\footnotesep{6.65\p@}
+\setlength{\skip\footins}{9\p@ \@plus 4\p@ \@minus 2\p@}
+%    \end{macrocode}
+%
+%フロート関係の設定.
+%    \begin{macrocode}
+\setlength\floatsep    {12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\textfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\intextsep   {12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\dblfloatsep    {12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\dbltextfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\@fptop{0\p@ \@plus 1fil}
+\setlength\@fpsep{8\p@ \@plus 2fil}
+\setlength\@fpbot{0\p@ \@plus 1fil}
+\setlength\@dblfptop{0\p@ \@plus 1fil}
+\setlength\@dblfpsep{8\p@ \@plus 2fil}
+\setlength\@dblfpbot{0\p@ \@plus 1fil}
+\setlength\partopsep{2\p@ \@plus 1\p@ \@minus 1\p@}
+%    \end{macrocode}
+%リストの設定に戻る.
+%    \begin{macrocode}
+\def\@listi{\leftmargin\leftmargini
+            \parsep 4\p@ \@plus2\p@ \@minus\p@
+            \topsep 8\p@ \@plus2\p@ \@minus4\p@
+            \itemsep4\p@ \@plus2\p@ \@minus\p@}
+\let\@listI\@listi
+\@listi
+\def\@listii {\leftmargin\leftmarginii
+              \labelwidth\leftmarginii
+              \advance\labelwidth-\labelsep
+              \topsep    4\p@ \@plus2\p@ \@minus\p@
+              \parsep    2\p@ \@plus\p@  \@minus\p@
+              \itemsep   \parsep}
+\def\@listiii{\leftmargin\leftmarginiii
+              \labelwidth\leftmarginiii
+              \advance\labelwidth-\labelsep
+              \topsep    2\p@ \@plus\p@\@minus\p@
+              \parsep    \z@
+              \partopsep \p@ \@plus\z@ \@minus\p@
+              \itemsep   \topsep}
+%    \end{macrocode}
+%以上で |10ot| の場合は終わり.
+%
+%続いて |11pt| の場合.
+%    \begin{macrocode}
+\else\if1\@ptsize\relax       %--------- 11pt
+\setlength\footnotesep{7.7\p@}
+\setlength{\skip\footins}{10\p@ \@plus 4\p@ \@minus 2\p@}
+\setlength\floatsep    {12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\textfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\intextsep   {12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\dblfloatsep    {12\p@ \@plus 2\p@ \@minus 2\p@}
+\setlength\dbltextfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\@fptop{0\p@ \@plus 1fil}
+\setlength\@fpsep{8\p@ \@plus 2fil}
+\setlength\@fpbot{0\p@ \@plus 1fil}
+\setlength\@dblfptop{0\p@ \@plus 1fil}
+\setlength\@dblfpsep{8\p@ \@plus 2fil}
+\setlength\@dblfpbot{0\p@ \@plus 1fil}
+\setlength\partopsep{3\p@ \@plus 1\p@ \@minus 1\p@}
+\def\@listi{\leftmargin\leftmargini
+            \parsep 4.5\p@ \@plus2\p@ \@minus\p@
+            \topsep 9\p@   \@plus3\p@ \@minus5\p@
+            \itemsep4.5\p@ \@plus2\p@ \@minus\p@}
+\let\@listI\@listi
+\@listi
+\def\@listii {\leftmargin\leftmarginii
+              \labelwidth\leftmarginii
+              \advance\labelwidth-\labelsep
+              \topsep    4.5\p@ \@plus2\p@ \@minus\p@
+              \parsep    2\p@   \@plus\p@  \@minus\p@
+              \itemsep   \parsep}
+\def\@listiii{\leftmargin\leftmarginiii
+              \labelwidth\leftmarginiii
+              \advance\labelwidth-\labelsep
+              \topsep    2\p@ \@plus\p@\@minus\p@
+              \parsep    \z@
+              \partopsep \p@ \@plus\z@ \@minus\p@
+              \itemsep   \topsep}
+%    \end{macrocode}
+%
+%続いて |12pt| の場合.
+%    \begin{macrocode}
+\else                         %--------- 12pt
+\setlength\footnotesep{8.4\p@}
+\setlength{\skip\footins}{10.8\p@ \@plus 4\p@ \@minus 2\p@}
+\setlength\floatsep    {12\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\textfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\intextsep   {14\p@ \@plus 4\p@ \@minus 4\p@}
+\setlength\dblfloatsep    {14\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\dbltextfloatsep{20\p@ \@plus 2\p@ \@minus 4\p@}
+\setlength\@fptop{0\p@ \@plus 1fil}
+\setlength\@fpsep{10\p@ \@plus 2fil}
+\setlength\@fpbot{0\p@ \@plus 1fil}
+\setlength\@dblfptop{0\p@ \@plus 1fil}
+\setlength\@dblfpsep{10\p@ \@plus 2fil}
+\setlength\@dblfpbot{0\p@ \@plus 1fil}
+\setlength\partopsep{3\p@ \@plus 2\p@ \@minus 2\p@}
+\def\@listi{\leftmargin\leftmargini
+            \parsep 5\p@  \@plus2.5\p@ \@minus\p@
+            \topsep 10\p@ \@plus4\p@   \@minus6\p@
+            \itemsep5\p@  \@plus2.5\p@ \@minus\p@}
+\let\@listI\@listi
+\@listi
+\def\@listii {\leftmargin\leftmarginii
+              \labelwidth\leftmarginii
+              \advance\labelwidth-\labelsep
+              \topsep    5\p@   \@plus2.5\p@ \@minus\p@
+              \parsep    2.5\p@ \@plus\p@    \@minus\p@
+              \itemsep   \parsep}
+\def\@listiii{\leftmargin\leftmarginiii
+              \labelwidth\leftmarginiii
+              \advance\labelwidth-\labelsep
+              \topsep    2.5\p@\@plus\p@\@minus\p@
+              \parsep    \z@
+              \partopsep \p@ \@plus\z@ \@minus\p@
+              \itemsep   \topsep}
+\fi\fi                        %---------
+%    \end{macrocode}
+%以上で基底フォントサイズ依存部分は終了.
+%
+%残りのリスト関係の設定.
+%    \begin{macrocode}
+\def\@listiv {\leftmargin\leftmarginiv
+              \labelwidth\leftmarginiv
+              \advance\labelwidth-\labelsep}
+\def\@listv  {\leftmargin\leftmarginv
+              \labelwidth\leftmarginv
+              \advance\labelwidth-\labelsep}
+\def\@listvi {\leftmargin\leftmarginvi
+              \labelwidth\leftmarginvi
+              \advance\labelwidth-\labelsep}
+\renewcommand\theenumi{\@arabic\c@enumi}
+\renewcommand\theenumii{\@alph\c@enumii}
+\renewcommand\theenumiii{\@roman\c@enumiii}
+\renewcommand\theenumiv{\@Alph\c@enumiv}
+\newcommand\labelenumi{\theenumi.}
+\newcommand\labelenumii{(\theenumii)}
+\newcommand\labelenumiii{\theenumiii.}
+\newcommand\labelenumiv{\theenumiv.}
+\renewcommand\p@enumii{\theenumi}
+\renewcommand\p@enumiii{\theenumi(\theenumii)}
+\renewcommand\p@enumiv{\p@enumiii\theenumiii}
+\newcommand\labelitemi{\textbullet}
+\newcommand\labelitemii{\normalfont\bfseries \textendash}
+\newcommand\labelitemiii{\textasteriskcentered}
+\newcommand\labelitemiv{\textperiodcentered}
+%    \end{macrocode}
+%
+%\begin{environment}{description}
+%|description| の定義は \PKN{jsarticle} のそれに準じる.
+%ただし |\labelsep| は (1\,zw でなくて) 1\,em とする.
+%(|\descriptionlabel| の定義方法が異なるので注意せよ.)
+%\changes{v1.1a}{2005/02/24}
+%  {description の定義を変更.}
+%    \begin{macrocode}
+\newenvironment{description}
+               {\list{}{\labelwidth\leftmargin \labelsep1em%
+                        \advance\labelwidth-\labelsep
+                        \let\makelabel\descriptionlabel}}
+               {\endlist}
+\newcommand*\descriptionlabel[1]{\normalfont\bfseries #1\hfil}
+%    \end{macrocode}
+%\end{environment}
+%
+%^^A----------------
+%\subsection{新しい環境の定義}
+%
+%\qparag{謝辞}
+%    \begin{macrocode}
+\newenvironment{acknowledge}
+               {\begin{titlepage}
+                \vspace*{50\p@}%
+                  {\parindent \z@ \raggedright \normalfont
+                   \interlinepenalty\@M
+                   \chapt@font Acknowledgements\par\nobreak
+                   \vskip 40\p@}%
+               }
+               {\end{titlepage}}
+%    \end{macrocode}
+%
+%\qparag{要旨}
+%v1.0 では段落下げの量は, 英文が 0\,em, 和文が 1\,em という
+%訳の分からない値になっていたが,
+%v1.1a でそれぞれ 1.5\,em と 1\,zw に変更した.
+%\changes{v1.1a}{2005/02/24}
+%  {要旨環境中の段落下げの量の変更.}
+%\changes{v1.1c}{2005/02/27}
+%  {要旨出力方法の変更に合わせて要旨環境の定義を修正.}
+%
+%\noindent ※\quad
+%v1.1c において全面的に見直した.
+%詳細は \pageref{anc:abstract} ページ参照.
+%\changes{v1.3}{2009/01/22}
+%  {欧文行送りの変更に伴い, jabstract に `baselinestretch 設定を追加.}
+%    \begin{macrocode}
+\newsavebox{\eabstractbox}%
+\newsavebox{\jabstractbox}%
+\newenvironment{eabstract}%
+    {\global\setbox\eabstractbox\vbox\bgroup
+     \everypar{}% cancel \@nodocument
+     \@beginparpenalty\@lowpenalty \small
+     \setlength{\parindent}{1.5em}%
+     \begin{center}%
+       \bfseries\MakeUppercase{\eabstractname}%
+       \@endparpenalty\@M
+     \end{center}\par}%
+    {\par\egroup}
+\newenvironment{jabstract}%
+    {\global\setbox\jabstractbox\vbox\bgroup
+     \everypar{}%
+     \renewcommand{\baselinestretch}{1.4}%
+     \@beginparpenalty\@lowpenalty \small
+     \setlength{\parindent}{1zw}%
+     \begin{center}%
+       \bfseries \jabstractname
+       \@endparpenalty\@M
+     \end{center}\par}%
+    {\par\egroup}
+%    \end{macrocode}
+%|english| 設定時の |jabstract| 環境.
+%    \begin{macrocode}
+\ifist@english
+\renewenvironment{jabstract}%
+    {\global\setbox\jabstractbox\vbox\bgroup\everypar{}}
+    {\par\egroup\global\setbox\jabstractbox\box\voidb@x}
+\fi
+%    \end{macrocode}
+%
+%\qparag{韻文}
+%論文には関係ないと思うなかれ.
+%    \begin{macrocode}
+\newenvironment{verse}
+               {\let\\\@centercr
+                \list{}{\itemsep      \z@
+                        \itemindent   -1.5em%
+                        \listparindent\itemindent
+                        \rightmargin  \leftmargin
+                        \advance\leftmargin 1.5em}%
+                \item\relax}
+               {\endlist}
+%    \end{macrocode}
+%
+%\qparag{引用}
+%    \begin{macrocode}
+\newenvironment{quotation}
+               {\list{}{\listparindent 1.5em%
+                        \itemindent    \listparindent
+                        \rightmargin   \leftmargin
+                        \parsep        \z@ \@plus\p@}%
+                \item\relax}
+               {\endlist}
+\newenvironment{quote}
+               {\list{}{\rightmargin\leftmargin}%
+                \item\relax}
+               {\endlist}
+%    \end{macrocode}
+%
+%\qparag{Titlepage}
+%\changes{v1.1c}{2005/02/27}
+%  {titlepage 環境の変更: carepage 時の対策.}
+%    \begin{macrocode}
+\newenvironment{titlepage}
+    {\ifist@carepage \cleardoublepage \fi
+      \if@twocolumn
+        \@restonecoltrue\onecolumn
+      \else
+        \@restonecolfalse\newpage
+      \fi
+      \thispagestyle{empty}%
+%     \setcounter{page}\@ne
+    }%
+    {\if@restonecol\twocolumn \else \newpage \fi
+%    \ifist@carepage\else \setcounter{page}\@ne \fi
+    }
+%    \end{macrocode}
+%
+%\qparag{付録}
+%これは環境じゃないけど.
+%    \begin{macrocode}
+\newcommand\appendix{\par
+  \setcounter{chapter}{0}%
+  \setcounter{section}{0}%
+  \gdef\@chapapp{\appendixname}%
+  \gdef\thechapter{\@Alph\c@chapter}}
+%    \end{macrocode}
+%
+%^^A----------------
+%\subsection{既存の環境のパラメタ設定}
+%
+%全て \PKN{report} のまま.
+%    \begin{macrocode}
+\setlength\arraycolsep{5\p@}
+\setlength\tabcolsep{6\p@}
+\setlength\arrayrulewidth{.4\p@}
+\setlength\doublerulesep{2\p@}
+\setlength\tabbingsep{\labelsep}
+\skip\@mpfootins = \skip\footins
+\setlength\fboxsep{3\p@}
+\setlength\fboxrule{.4\p@}
+\@addtoreset {equation}{chapter}
+\renewcommand\theequation
+  {\ifnum \c@chapter>\z@ \thechapter.\fi \@arabic\c@equation}
+%    \end{macrocode}
+%
+%^^A----------------
+%\subsection{フロートの定義}
+%
+%今では \PKN{report} と完全に同じにしている.
+%(v1.0 ではこの定義を \PKN{j-report} と同じにして,
+%別のパラメタ設定で \PKN{report} に合わせていた.)
+%    \begin{macrocode}
+\newcounter{figure}[chapter]
+\renewcommand \thefigure
+     {\ifnum \c@chapter>\z@ \thechapter.\fi \@arabic\c@figure}
+\def\fps@figure{tbp}
+\def\ftype@figure{1}
+\def\ext@figure{lof}
+\def\fnum@figure{\figurename\nobreakspace\thefigure}
+\newenvironment{figure}
+               {\@float{figure}}
+               {\end@float}
+\newenvironment{figure*}
+               {\@dblfloat{figure}}
+               {\end@dblfloat}
+\newcounter{table}[chapter]
+\renewcommand \thetable
+     {\ifnum \c@chapter>\z@ \thechapter.\fi \@arabic\c@table}
+\def\fps@table{tbp}
+\def\ftype@table{2}
+\def\ext@table{lot}
+\def\fnum@table{\tablename\nobreakspace\thetable}
+\newenvironment{table}
+               {\@float{table}}
+               {\end@float}
+\newenvironment{table*}
+               {\@dblfloat{table}}
+               {\end@dblfloat}
+%    \end{macrocode}
+%
+%\qparag{キャプション}
+%    \begin{macrocode}
+\newlength\abovecaptionskip
+\newlength\belowcaptionskip
+\setlength\abovecaptionskip{10\p@}
+\setlength\belowcaptionskip{0\p@}
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{#1: #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    #1: #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+%    \end{macrocode}
+%
+%^^A----------------
+%\subsection{旧式のフォント選択コマンド}
+%
+%    \begin{macrocode}
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+\DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
+\DeclareOldFontCommand{\tt}{\normalfont\ttfamily}{\mathtt}
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+\DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+\DeclareOldFontCommand{\sl}{\normalfont\slshape}{\@nomath\sl}
+\DeclareOldFontCommand{\sc}{\normalfont\scshape}{\@nomath\sc}
+\DeclareRobustCommand*\cal{\@fontswitch\relax\mathcal}
+\DeclareRobustCommand*\mit{\@fontswitch\relax\mathnormal}
+%    \end{macrocode}
+%
+%^^A----------------
+%\subsection{相互参照}
+%
+%\qparag{目次}
+%    \begin{macrocode}
+\newcommand\@pnumwidth{1.55em}
+\newcommand\@tocrmarg{2.55em}
+\newcommand\@dotsep{4.5}
+\setcounter{tocdepth}{2}
+\newcommand\tableofcontents{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{\contentsname
+        \@mkboth{%
+           \MakeUppercase\contentsname}{\MakeUppercase\contentsname}}%
+    \@starttoc{toc}%
+    \if@restonecol\twocolumn\fi
+    }
+\newcommand*\l@part[2]{%
+  \ifnum \c@tocdepth >-2\relax
+    \addpenalty{-\@highpenalty}%
+    \addvspace{2.25em \@plus\p@}%
+    \setlength\@tempdima{3em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      {\leavevmode
+       \large \bfseries #1\hfil \hb@xt@\@pnumwidth{\hss #2}}\par
+       \nobreak
+         \global\@nobreaktrue
+         \everypar{\global\@nobreakfalse\everypar{}}%
+    \endgroup
+  \fi}
+\newcommand*\l@chapter[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \vskip 1.0em \@plus\p@
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+      \penalty\@highpenalty
+    \endgroup
+  \fi}
+\newcommand*\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
+\newcommand*\l@subsection{\@dottedtocline{2}{3.8em}{3.2em}}
+\newcommand*\l@subsubsection{\@dottedtocline{3}{7.0em}{4.1em}}
+\newcommand*\l@paragraph{\@dottedtocline{4}{10em}{5em}}
+\newcommand*\l@subparagraph{\@dottedtocline{5}{12em}{6em}}
+%    \end{macrocode}
+%
+%\qparag{図目次・表目次}
+%    \begin{macrocode}
+\newcommand\listoffigures{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{\listfigurename
+      \@mkboth{\MakeUppercase\listfigurename}%
+              {\MakeUppercase\listfigurename}}%
+    \@starttoc{lof}%
+    \if@restonecol\twocolumn\fi
+    }
+\newcommand*\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+\newcommand\listoftables{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{\listtablename
+      \@mkboth{%
+          \MakeUppercase\listtablename}%
+         {\MakeUppercase\listtablename}}%
+    \@starttoc{lot}%
+    \if@restonecol\twocolumn\fi
+    }
+\let\l@table\l@figure
+%    \end{macrocode}
+%
+%\qparag{参考文献リスト}
+%学位論文では参考文献リストの見出し(つまり ``References'')が
+%目次に載るのが正しいらしいので |\addcontentsline| を加えた.
+%ちなみに v1.0 でそうならなかったのは,
+%\PKN{report}, \PKN{j-report} がそうでないから.
+%\changes{v1.1a}{2005/02/24}
+%  {thebibliography 中に `addcontentsline 追加.}
+%    \begin{macrocode}
+\newdimen\bibindent
+\setlength\bibindent{1.5em}
+\newenvironment{thebibliography}[1]
+     {\chapter*{\bibname
+        \@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}}%
+      \addcontentsline{toc}{chapter}{\bibname}% added(v1.1a)
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\newcommand\newblock{\hskip .11em\@plus.33em\@minus.07em}
+\let\@openbib@code\@empty
+%    \end{macrocode}
+%
+%\qparag{索引}
+%    \begin{macrocode}
+\newenvironment{theindex}
+               {\if@twocolumn
+                  \@restonecolfalse
+                \else
+                  \@restonecoltrue
+                \fi
+                \columnseprule \z@
+                \columnsep 35\p@
+                \twocolumn[\@makeschapterhead{\indexname}]%
+                \@mkboth{\MakeUppercase\indexname}%
+                        {\MakeUppercase\indexname}%
+                \thispagestyle{plain}\parindent\z@
+                \parskip\z@ \@plus .3\p@\relax
+                \let\item\@idxitem}
+               {\if@restonecol\onecolumn\else\clearpage\fi}
+\newcommand\@idxitem{\par\hangindent 40\p@}
+\newcommand\subitem{\@idxitem \hspace*{20\p@}}
+\newcommand\subsubitem{\@idxitem \hspace*{30\p@}}
+\newcommand\indexspace{\par \vskip 10\p@ \@plus5\p@ \@minus3\p@\relax}
+%    \end{macrocode}
+%
+%\qparag{脚注}
+%なぜここにあるの?
+%    \begin{macrocode}
+\renewcommand\footnoterule{%
+  \kern-3\p@
+  \hrule\@width.4\columnwidth
+  \kern2.6\p@}
+\@addtoreset{footnote}{chapter}
+\newcommand\@makefntext[1]{%
+    \parindent 1em%
+    \noindent
+    \hb@xt@1.8em{\hss\@makefnmark}#1}
+%    \end{macrocode}
+%
+%^^A----------------
+%\subsection{単語}
+%
+%\begin{macro}{\contentsname}
+%\begin{macro}{\listfigurename}
+%\begin{macro}{\listtablename}
+%\begin{macro}{\bibname}
+%\begin{macro}{\indexname}
+%目次・図目次・表目次・参考文献一覧・目次の部に付される見出し.
+%    \begin{macrocode}
+\newcommand\contentsname{Contents}
+\newcommand\listfigurename{List of Figures}
+\newcommand\listtablename{List of Tables}
+\newcommand\bibname{References}
+\newcommand\indexname{Index}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\begin{macro}{\figurename}
+%\begin{macro}{\tablename}
+%図(|figure|), 表(|table|)のキャプションで用いられる.
+%    \begin{macrocode}
+\newcommand\figurename{Figure}
+\newcommand\tablename{Table}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\begin{macro}{\partname}
+%\begin{macro}{\chaptername}
+%\begin{macro}{\appendixname}
+%部(|\part|), 章(|\chapter|)および付録中の章の見出しで用いられる.
+%    \begin{macrocode}
+\newcommand\partname{Part}
+\newcommand\chaptername{Chapter}
+\newcommand\appendixname{Appendix}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\begin{macro}{\eabstractname}
+%\begin{macro}{\jabstractname}
+%英文要旨(|eabstract|)および和文要旨(|jabstract|)の見出し.
+%    \begin{macrocode}
+\newcommand\eabstractname{Abstract}
+\newcommand\jabstractname{\ist@j@abst}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\ethesisname}
+%\begin{macro}{\jthesisname}
+%\begin{macro}{\einterimname}
+%\begin{macro}{\jinterimname}
+%\begin{macro}{\thesisgrade}
+%\begin{macro}{\ist@whatscience}
+%表紙の中で用いられる語句.
+%v1.1f から |\jinterimname| を空白(|\quad|)から
+%「中間報告」に変更した.
+%中間報告(要旨提出)の様式には不明な点も多いのだが,
+%これが最も正しいことにしてしまおう.
+%    \begin{macrocode}
+\if@seniorthesis
+ \newcommand\ethesisname{A Senior Thesis}
+ \newcommand\einterimname{An Interim Report (Abstract)}
+ \newcommand\jthesisname{\ist@j@senior}
+ \newcommand\jinterimname{\ist@j@interim}
+ \newcommand\thesisgrade{Bachelor}
+ \newcommand\ist@whatscience{Information Science}
+\else \if@masterthesis
+ \newcommand\ethesisname{A Master Thesis}
+ \newcommand\einterimname{An Interim Report (Abstract)}
+ \newcommand\jthesisname{\ist@j@master}
+ \newcommand\jinterimname{\ist@j@interim}
+ \newcommand\thesisgrade{Master}
+ \newcommand\ist@whatscience{Computer Science}
+\else \if@doctorthesis
+ \newcommand\ethesisname{A Doctor Thesis}
+ \newcommand\einterimname{An Interim Report (Abstract)}
+ \newcommand\jthesisname{\ist@j@doctor}
+ \newcommand\jinterimname{\ist@j@interim}
+ \newcommand\thesisgrade{Doctor}
+ \newcommand\ist@whatscience{Computer Science}
+\fi \fi \fi
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%以下は各自で設定するもの.
+%\begin{macro}{\etitle}
+%\begin{macro}{\jtitle}
+%標題.
+%|\@etitle| が英文標題を表し,
+%|\etitle{|\meta{str}|}| は |\@etitle| を \meta{str} に定義する.
+%他のコマンドも同様.
+%    \begin{macrocode}
+\def\etitle#1{\gdef\@etitle{#1}}
+\def\jtitle#1{\gdef\@jtitle{#1}}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\begin{macro}{\eauthor}
+%\begin{macro}{\jauthor}
+%著者名.
+%    \begin{macrocode}
+\def\eauthor#1{\gdef\@eauthor{#1}}
+\def\jauthor#1{\gdef\@jauthor{#1}}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\begin{macro}{\esupervisor}
+%\begin{macro}{\jsupervisor}
+%指導教官名.
+%    \begin{macrocode}
+\def\esupervisor#1{\gdef\@esupervisor{#1}}
+\def\jsupervisor#1{\gdef\@jsupervisor{#1}}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\begin{macro}{\supervisortitle}
+%指導教官の職名.
+%    \begin{macrocode}
+\def\supervisortitle#1{\gdef\@supervisortitle{#1}}
+%    \end{macrocode}
+%\end{macro}
+%\begin{macro}{\@etitle}
+%\begin{macro}{\@jtitle}
+%これらの項目が未設定だとエラーにする.
+%    \begin{macrocode}
+\def\@etitle{\ist@err@notdefd\etitle}
+\def\@jtitle{\ist@err@notdefd\jtitle}
+\def\@eauthor{\ist@err@notdefd\eauthor}
+\def\@jauthor{\ist@err@notdefd\jauthor}
+\def\@esupervisor{\ist@err@notdefd\esupervisor}
+\def\@jsupervisor{\ist@err@notdefd\jsupervisor}
+\def\@supervisortitle{\ist@err@notdefd\supervisortitle}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\@date}
+%\begin{macro}{\today}
+%日付が指定されてないとエラーにする.
+%ただし |\today| は有効である.
+%\changes{v1.1a}{2005/02/24}
+%  {\@date の初期値をエラー発生に変更.}
+%    \begin{macrocode}
+\def\@date{\ist@err@notdefd\@date}
+\def\today{\ifcase\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi
+  \space\number\day, \number\year}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\supervisortitleline}
+%\begin{macro}{\@supervisortitleline}
+%\begin{macro}{\thesupervisortitle}
+%指導教官の職名の行の全体.
+%この指定の中で |\@supervisortitle| を参照する必要が
+%あるので, これを |\thesupervisortitle| として表に出しておく.
+%この項目の初期値は ``|\@supervisortitle| of |\ist@whatscience|''
+%で, |\ist@whatscience| は ``Information Science'' (|senior|)
+%または ``Computer Science'' (|master|/|doctor|) としている.
+%本当はどうするのが正しいのだろう?
+%    \begin{macrocode}
+\newcommand\thesupervisortitle{\@supervisortitle}
+\newcommand*\supervisortitleline[1]{\gdef\@supervisortitleline{#1}}
+\newcommand\@supervisortitleline{%
+  \@supervisortitle\ of \ist@whatscience
+}
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%\begin{macro}{\ist@j@senior}
+%\begin{macro}{\ist@j@master}
+%\begin{macro}{\ist@j@doctor}
+%\begin{macro}{\ist@j@abst}
+%\begin{macro}{\ist@j@interim}
+%\qparag{和文語句}
+%欧文用 \TeX\ で通すという無理をするために,
+%ちょっと |\catcode| している.
+%気にしてはいけない.
+%    \begin{macrocode}
+\ifist@english \catcode`\.=14 \else \catcode`\.=9 \fi
+.\newcommand\ist@j@senior{卒業論文}
+.\newcommand\ist@j@master{修士論文}
+.\newcommand\ist@j@doctor{博士論文}
+.\newcommand\ist@j@abst{論文要旨}
+.\newcommand\ist@j@interim{中間報告}
+.\newcommand\ist@jparen[1]{（#1）}
+\catcode`\.=12\relax
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%\end{macro}
+%
+%^^A----------------
+%\subsection{初期化}
+%
+%\LaTeX\ のいくつかの命令を無効にする.
+%    \begin{macrocode}
+\def\title{\ist@err@invalid\title}
+\def\author{\ist@err@invalid\author}
+\def\and{\ist@err@invalid\and}
+\def\abstract{\ist@err@invalid\abstract}
+%    \end{macrocode}
+%
+%欧文 \TeX\ 使用時は |ist-en.clo| を読み込む.
+%    \begin{macrocode}
+\if e\ist@engine
+  \input{ist-en.clo}
+\fi
+%    \end{macrocode}
+%
+%|\sloppy| の定義をかなり sloppy になるように直した.
+%|sloppy| オプションが指定されているならば |\sloppy| にする.
+%残りは \PKN{report} のまま.
+%    \begin{macrocode}
+\setlength\columnsep{10\p@}
+\setlength\columnseprule{0\p@}
+\pagestyle{plain}
+\pagenumbering{arabic}
+\def\sloppy{\tolerance 9999 \hbadness 5000
+            \emergencystretch 3em
+            \hfuzz 2.5\p@ \vfuzz .5\p@}
+\ifist@sloppy
+  \sloppy
+\fi
+\if@twoside
+\else
+  \raggedbottom
+\fi
+\if@twocolumn
+  \twocolumn
+  \sloppy
+  \flushbottom
+\else
+  \onecolumn
+\fi
+%    \end{macrocode}
+%
+%^^A----------------
+%\subsection{終了}
+%お疲れ様でした. (誰にいってるの?)
+%
+%    \begin{macrocode}
+%</!isten>
+%    \end{macrocode}
+%
+%
+%^^A========================================================
+%\section{クラスオプションファイル ist-en.clo}
+%\label{sec:Ist-en}
+%^^A--------------------------------------------------------
+%
+%\noindent
+%警告: この節の内容は, 読者の精神に影響を与えるような
+%表現を含みます.
+%\par\medskip
+%
+%このソースをオプション `|isten|' 付きで \DCN{docstrip} で
+%処理すると, ファイル |ist-en.clo| が得られる.
+%これを用意しておくと, 欧文用の \LaTeX\ で
+%(表紙部と要旨に和文文字が入ったままの)論文のソースが
+%コンパイル可能となる
+%(|english| オプション指定時と同じ出力).
+%ただし, この機能は実験的なものであり,
+%必ずしも正しく動作する保証はない.
+%
+%\noindent ※ 制限事項:\quad
+%|\jauthor| 等のコマンドの場合, 以降に出現する
+%最初の ``|}| (+ 空白文字) + 改行'' の中の |}| を引数の
+%終わりを示す |}| と見なす.
+%これが実際と相違する場合には正しく動作しない.
+%特に SJIS の場合, 和文文字 2 バイト目の 7D$_{16}$ が |}| と
+%認識されるので注意.
+%|\begin{jabstract}| に関しては, 以降の最初の |\end{jabstract}| の
+%出現を終端とし, |verbatim| と同じ制限がかかる.
+%
+%    \begin{macrocode}
+%<*isten>
+\ProvidesFile{ist-en}
+    [2005/12/25 v1.1f
+     Class option file]
+%
+\def\ist@makesjenv#1{%
+  \@namedef{#1}{\ist@sj@gengobbler{#1}\ist@sj@begin}%
+  \expandafter\let\csname end#1\endcsname=\ist@sj@end}
+\def\ist@makesjcmd#1{\let#1=\ist@sj@cbegin}
+\def\istallowesccode{\catcode`\^^[=9 }
+\def\istdisallowesccode{\catcode`\^^[=15 }
+%
+\begingroup \catcode`\|=0 \catcode`\[=1 \catcode`\]=2 %
+ \catcode`\^^M=12 \catcode`\{=12 \catcode`\}=12 \catcode`\\=12 %
+ |gdef|ist@sj@gengobbler#1[%
+   |def|ist@sj@gobble##1\end{#1}[|end[#1]]]%
+ |gdef|ist@sj@cgobble#1}^^M[|ist@sj@cend]%
+|endgroup
+\def\ist@sj@begin{\ist@sj@sanitize \ist@sj@gobble}
+\def\ist@sj@end{}
+\def\ist@sj@cbegin{\begingroup \ist@sj@sanitize \ist@sj@cgobble}
+\def\ist@sj@cend{\endgroup}
+\def\ist@sj@sanitize{\let\do\@makeother\dospecials
+  \catcode`\^^M=12 \catcode`\ =9 \catcode`\^^[=9 }
+%
+\ist@makesjenv{jabstract}
+\ist@makesjcmd{\jsupervisor}
+\ist@makesjcmd{\jtitle}
+\ist@makesjcmd{\jauthor}
+\istallowesccode
+%</isten>
+%    \end{macrocode}
+%
+%^^A--------------------------------------------------------
+%\Finale
+%
+%^^A# End of file
