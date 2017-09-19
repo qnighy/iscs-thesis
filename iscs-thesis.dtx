@@ -20,7 +20,7 @@
 %\DisableCrossrefs
 %\CodelineNumbered
 %\MakeShortVerb{\|}
-%\CheckSum{3477}
+%\CheckSum{3524}
 %^^A--------------------------------------------------------
 %\iffalse  # driver 部は出力しない
 %    \begin{macrocode}
@@ -54,7 +54,7 @@
 %^^A========================================================
 %\title{ドキュメントクラス \textsf{iscs-thesis} (v1.3)}
 %\author{八登 崇之 (yato@is.s.u-tokyo.ac.jp)}
-%\date{2014/09/02}
+%\date{2017/09/19}
 %\maketitle
 %^^A--------------------------------------------------------
 %\iffalse # Why is it needed?
@@ -630,6 +630,11 @@
 %  \item 英文表題が全て大文字化されないようにした．
 %  \end{itemize}
 %
+%\item[Version 1.3c] [2017/09/19, 原]
+%  \begin{itemize}
+%  \item uplatexに対応した.
+%  \end{itemize}
+%
 %\end{description}
 %
 %
@@ -789,6 +794,18 @@
 %    \end{macrocode}
 %\end{macro}
 %
+%\begin{macro}{\ifist@simpletitlepage}
+%uplatex かどうか (自動検出).
+%\changes{v1.3c}{2017/09/19}
+%  {`ifist@uplatex 追加.}
+%    \begin{macrocode}
+\newif\ifist@uplatex
+\ist@uplatexfalse
+\def\ist@JYn{\ifist@uplatex JY2\else JY1\fi}
+\def\ist@JTn{\ifist@uplatex JT2\else JT1\fi}
+%    \end{macrocode}
+%\end{macro}
+%
 %^^A----------------
 %\subsection{オプションの宣言}
 %
@@ -894,6 +911,13 @@
 \ExecuteOptions{a4paper,11pt,oneside,onecolumn,draft,openany,%
             autosplitabst,counttitlepage}
 \ProcessOptions
+%    \end{macrocode}
+%\changes{v1.3c}{2017/09/19}
+%  {jsarticle と同様に uplatex を自動検出.}
+%    \begin{macrocode}
+\ifnum \ifx\ucs\@undefined\z@\else\ucs"3000 \fi ="3000
+  \ist@uplatextrue
+\fi
 %    \end{macrocode}
 %
 %|senior|, |master|, |doctor| のどれも指定されていない場合
@@ -1226,30 +1250,30 @@
 %  {和文フォントの明示的な代替の設定.}
 %    \begin{macrocode}
 \if p\ist@engine\relax
-\DeclareFontShape{JY1}{mc}{m}{it}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JT1}{mc}{m}{it}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JY1}{mc}{m}{sc}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JT1}{mc}{m}{sc}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JY1}{mc}{m}{sl}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JT1}{mc}{m}{sl}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JY1}{mc}{bx}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{mc}{bx}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{mc}{bx}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{mc}{bx}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{mc}{bx}{sl}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{mc}{bx}{sl}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{m}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{m}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{m}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{m}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{m}{sl}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{m}{sl}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{bx}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{bx}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{bx}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{bx}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{bx}{sl}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{m}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{m}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{m}{sc}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{m}{sc}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{m}{sl}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{m}{sl}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{m}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{m}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{m}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{m}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{m}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{m}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{bx}{sl}{<->ssub*gt/m/n}{}
 \fi
 %    \end{macrocode}
 %

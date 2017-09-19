@@ -56,6 +56,10 @@
 \newif\ifist@bindoffset
 \newif\ifist@simpletitlepage
 \newlength\bindoffset
+\newif\ifist@uplatex
+\ist@uplatexfalse
+\def\ist@JYn{\ifist@uplatex JY2\else JY1\fi}
+\def\ist@JTn{\ifist@uplatex JT2\else JT1\fi}
 \DeclareOption{a4paper}
    {\setlength\paperheight {297mm}%
     \setlength\paperwidth  {210mm}}
@@ -115,6 +119,9 @@
 \ExecuteOptions{a4paper,11pt,oneside,onecolumn,draft,openany,%
             autosplitabst,counttitlepage}
 \ProcessOptions
+\ifnum \ifx\ucs\@undefined\z@\else\ucs"3000 \fi ="3000
+  \ist@uplatextrue
+\fi
 \if@seniorthesis\else \if@masterthesis\else
   \if@doctorthesis\else
     \ist@fatalerror{%
@@ -268,30 +275,30 @@
 \fi\fi                        %---------
 \newcommand\isttitlesize{\@setfontsize\isttitlesize\@xivpt{25.2}}
 \if p\ist@engine\relax
-\DeclareFontShape{JY1}{mc}{m}{it}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JT1}{mc}{m}{it}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JY1}{mc}{m}{sc}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JT1}{mc}{m}{sc}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JY1}{mc}{m}{sl}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JT1}{mc}{m}{sl}{<->ssub*mc/m/n}{}
-\DeclareFontShape{JY1}{mc}{bx}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{mc}{bx}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{mc}{bx}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{mc}{bx}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{mc}{bx}{sl}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{mc}{bx}{sl}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{m}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{m}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{m}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{m}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{m}{sl}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{m}{sl}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{bx}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{bx}{it}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{bx}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{bx}{sc}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JY1}{gt}{bx}{sl}{<->ssub*gt/m/n}{}
-\DeclareFontShape{JT1}{gt}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{m}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{m}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{m}{sc}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{m}{sc}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{m}{sl}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{m}{sl}{<->ssub*mc/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{mc}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{mc}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{m}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{m}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{m}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{m}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{m}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{m}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{bx}{sc}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JYn}{gt}{bx}{sl}{<->ssub*gt/m/n}{}
+\DeclareFontShape{\ist@JTn}{gt}{bx}{sl}{<->ssub*gt/m/n}{}
 \fi
 \ifist@bindoffset
   \setlength{\bindoffset}{9mm}
